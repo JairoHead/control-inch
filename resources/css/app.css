@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .form-input {
+    @apply shadow-sm appearance-none border border-gray-300 dark:border-gray-700 rounded-md w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500;
+  }
+  .form-textarea {
+    @apply shadow-sm appearance-none border border-gray-300 dark:border-gray-700 rounded-md w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500;
+  }
+  .form-select {
+     @apply shadow-sm appearance-none border border-gray-300 dark:border-gray-700 rounded-md w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 pr-8; /* Añadido pr-8 para espacio de flecha */
+  }
+   .form-checkbox {
+     @apply h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-900;
+   }
+  /* --- ESTILOS DE BOTONES --- */
+  .form-button-primary {
+     @apply inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 disabled:opacity-25;
+  }
+   .form-button-secondary {
+     @apply inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500 active:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 disabled:opacity-25;
+   }
+    .form-button-success {
+      @apply inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 disabled:opacity-25;
+    }
+   .form-button-danger {
+     @apply inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 disabled:opacity-25;
+   }
+   /* Estilo para borde rojo en error */
+   .input-error { @apply border-red-500 dark:border-red-400 focus:border-red-500 focus:ring-red-500; 
+  }
+   .form-select-truncated {
+    max-width: 100%;
+  }
+  .form-select-truncated option {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+  }
+  /* Aumenta el tamaño de la fuente para el texto seleccionado en Tom Select */
+  .ts-control .item {
+      font-size: 1rem; /* Ajusta este valor según tu gusto (ej. 1rem, 15px) */
+  }
+
+  /* Aumenta el tamaño de la fuente para las opciones en el menú desplegable */
+  .ts-dropdown .option {
+      font-size: 1rem; /* Ajusta este valor según tu gusto */
+      padding: 8px 12px; /* Aumenta un poco el espacio para que no se vea apretado */
+  }
+   
+}
