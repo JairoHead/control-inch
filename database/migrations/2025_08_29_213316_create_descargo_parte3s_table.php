@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('descargo_parte1s', function (Blueprint $table) {
-            $table->id();
-            // Relación con la tabla de tipos
-            $table->foreignId('descargo_tipo_id')->constrained()->onDelete('cascade');
-            $table->text('plantilla'); // El texto de la opción
+        Schema::create('descargo_parte3s', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('descargo_tipo_id')->index('descargo_parte3s_descargo_tipo_id_foreign');
+            $table->text('plantilla');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('descargo_parte1s');
+        Schema::dropIfExists('descargo_parte3s');
     }
 };

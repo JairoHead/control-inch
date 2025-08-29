@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('descargo_parte2s', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('descargo_tipo_id')->constrained()->onDelete('cascade');
-            $table->text('plantilla');
+        Schema::create('foto_ordens', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('orden_id')->index('foto_ordens_orden_id_foreign');
+            $table->string('path');
+            $table->string('caption')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('descargo_parte2s');
+        Schema::dropIfExists('foto_ordens');
     }
 };

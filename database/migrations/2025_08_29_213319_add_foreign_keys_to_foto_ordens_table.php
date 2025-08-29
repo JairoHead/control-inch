@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('foto_ordens', function (Blueprint $table) {
-            // Añadimos la restricción aquí
-            $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
+            $table->foreign(['orden_id'])->references(['id'])->on('ordenes')->onUpdate('restrict')->onDelete('cascade');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('foto_ordens', function (Blueprint $table) {
-            $table->dropForeign(['orden_id']);
+            $table->dropForeign('foto_ordens_orden_id_foreign');
         });
     }
 };

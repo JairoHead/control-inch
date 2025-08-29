@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('plantilla_reportes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_descriptivo'); // Ej: "Reporte Sin Reforma Aérea"
+            $table->string('nombre_descriptivo');
             $table->enum('tipo_trabajo', ['PROYECTO', 'RUTINA']);
-            // Relación con los tipos de descargo que ya creamos
-            $table->foreignId('descargo_tipo_id')->constrained('descargo_tipos');
-            // Nombre del archivo de la plantilla en la carpeta storage
-            $table->string('nombre_archivo'); // Ej: "LCL 6300851661-MDE-19.9KW-CNX AÉREA-SIN REFORMA-CHANCAY.docx"
+            // La columna 'descargo_tipo_id' ya no se crea.
+            $table->string('nombre_archivo');
             $table->timestamps();
         });
     }

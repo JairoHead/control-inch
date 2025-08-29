@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('descargo_tipos', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre', 100); // Ej: "Sin Reforma"
+        Schema::create('descargo_parte2s', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('descargo_tipo_id')->index('descargo_parte2s_descargo_tipo_id_foreign');
+            $table->text('plantilla');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('descargo_tipos');
+        Schema::dropIfExists('descargo_parte2s');
     }
 };
