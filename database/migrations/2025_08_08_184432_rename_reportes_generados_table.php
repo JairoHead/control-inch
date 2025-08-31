@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('descargo_tipos', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('nombre', 100);
-            $table->timestamps();
-        });
+        // Renombramos la tabla de 'reportes_generados' (plural) a 'reporte_generados' (singular)
+        Schema::rename('reportes_generados', 'reporte_generados');
     }
 
     /**
@@ -23,6 +20,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('descargo_tipos');
+        // Esto permite revertir el cambio si es necesario
+        Schema::rename('reporte_generados', 'reportes_generados');
     }
 };

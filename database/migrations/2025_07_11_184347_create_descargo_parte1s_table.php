@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('foto_ordens', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('orden_id')->index('foto_ordens_orden_id_foreign');
-            $table->string('path');
-            $table->string('caption')->nullable();
+        Schema::create('descargo_parte1s', function (Blueprint $table) {
+            $table->id();
+            // Relación con la tabla de tipos
+            $table->foreignId('descargo_tipo_id')->constrained()->onDelete('cascade');
+            $table->text('plantilla'); // El texto de la opción
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('foto_ordens');
+        Schema::dropIfExists('descargo_parte1s');
     }
 };

@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('descargo_parte2s', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('descargo_tipo_id')->index('descargo_parte2s_descargo_tipo_id_foreign');
-            $table->text('plantilla');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            // Añadimos la nueva columna después de la columna 'email'
+            $table->string('profile_photo_path', 2048)->nullable()->after('email');
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('descargo_parte2s');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profile_photo_path');
+        });
     }
 };

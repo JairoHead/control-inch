@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ubigeo_departamentos', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('departamento', 50);
-            $table->string('ubigeo', 2);
+        Schema::create('descargo_parte2s', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('descargo_tipo_id')->constrained()->onDelete('cascade');
+            $table->text('plantilla');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ubigeo_departamentos');
+        Schema::dropIfExists('descargo_parte2s');
     }
 };

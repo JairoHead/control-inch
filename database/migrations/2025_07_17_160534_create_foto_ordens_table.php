@@ -9,12 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // ...
     public function up(): void
     {
-        Schema::create('descargo_parte1s', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('descargo_tipo_id')->index('descargo_parte1s_descargo_tipo_id_foreign');
-            $table->text('plantilla');
+        Schema::create('foto_ordens', function (Blueprint $table) {
+            $table->id();
+            // ¡NO USAMOS foreignId()! Lo definimos manualmente.
+            $table->integer('orden_id'); // INT(11) con signo
+            $table->string('path');
+            $table->string('caption')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('descargo_parte1s');
+        Schema::dropIfExists('foto_ordens');
     }
 };

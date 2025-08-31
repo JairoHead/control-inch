@@ -19,10 +19,21 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.users.update', $user) }}" method="POST">
+                <form action="{{ route('admin.users.update', $user) }}" method="POST enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
-                    <div class="space-y-4">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label">Foto de Perfil</label>
+                            <div class="mt-2 flex items-center gap-x-4">
+                                <img id="photo_preview" src="{{ $user->profile_photo_url }}" alt="Foto actual" class="h-20 w-20 rounded-full object-cover bg-gray-200">
+                                <div>
+                                    <input id="photo" name="photo" type="file" class="form-input-file" accept="image/jpeg,image/png,image/jpg">
+                                    <p class="text-xs text-gray-500 mt-1">Subir una nueva foto reemplazará la actual.</p>
+                                    @error('photo') <p class="form-error-message">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <label for="name" class="form-label">Nombre <span class="text-red-500">*</span></label>
                             <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" class="form-input w-full" required>
@@ -64,4 +75,28 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const photoInput = document.getElementById('photo');
+        const photoPreview = document.getElementById('photo_preview');
+        
+        if (photoInput && photoPreview) {
+            const originalSrc = photoPreview.src; // Guardamos la foto original
+            photoInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoPreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    photoPreview.src = originalSrc; // Restaura si se cancela
+                }
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

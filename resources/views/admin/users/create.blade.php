@@ -19,9 +19,20 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.users.store') }}" method="POST">
+                <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="space-y-4">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label">Foto de Perfil <span class="text-gray-500 text-xs">(Opcional)</span></label>
+                            <div class="mt-2 flex items-center gap-x-4">
+                                <img id="photo_preview" src="{{ asset('images/default-avatar.png') }}" alt="Vista previa" class="h-20 w-20 rounded-full object-cover bg-gray-200">
+                                <div>
+                                    <input id="photo" name="photo" type="file" class="form-input-file" accept="image/jpeg,image/png,image/jpg">
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG hasta 2MB.</p>
+                                    @error('photo') <p class="form-error-message">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <label for="name" class="form-label">Nombre <span class="text-red-500">*</span></label>
                             <input id="name" type="text" name="name" value="{{ old('name') }}" class="form-input w-full" required>
@@ -63,4 +74,25 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const photoInput = document.getElementById('photo');
+        const photoPreview = document.getElementById('photo_preview');
+        
+        if (photoInput && photoPreview) {
+            photoInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoPreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

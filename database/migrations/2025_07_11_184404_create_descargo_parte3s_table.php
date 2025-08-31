@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('descargo_parte3s', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('descargo_tipo_id')->index('descargo_parte3s_descargo_tipo_id_foreign');
+            $table->id();
+            $table->foreignId('descargo_tipo_id')->constrained()->onDelete('cascade');
             $table->text('plantilla');
             $table->timestamps();
         });

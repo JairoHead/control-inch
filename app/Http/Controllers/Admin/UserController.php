@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     /**
@@ -35,23 +36,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validamos los datos del formulario
-        $request->validate([
+        // 1. Validamos los datos del formulario, incluyendo la foto opcional
+        $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string', 'in:admin,user'],
             'is_active' => ['required', 'boolean'],
+            'photo' => ['nullable', 'image', 'max:2048'], // Regla para la foto (2MB max)
         ]);
 
-        // Creamos el nuevo usuario
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'is_active' => $request->is_active,
-        ]);
+        // 2. Preparamos los datos para la creación del usuario
+        $userData = [
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'role' => $validatedData['role'],
+            'is_active' => $validatedData['is_active'],
+        ];
+
+        // 3. Si se subió una foto, la guardamos y añadimos la ruta a los datos
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('profile-photos', 'public');
+            $userData['profile_photo_path'] = $path;
+        }
+
+        // 4. Creamos el nuevo usuario con todos los datos
+        User::create($userData);
 
         // Redirigimos a la lista con un mensaje de éxito
         return redirect()->route('admin.users.index')->with('success', 'Usuario creado exitosamente.');
@@ -80,27 +91,40 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // Validamos los datos
-        $request->validate([
+        // 1. Validamos los datos, incluyendo la foto opcional
+        $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'role' => ['required', 'string', 'in:admin,user'],
             'is_active' => ['required', 'boolean'],
-            // La contraseña es opcional al editar
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'photo' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        // Actualizamos los datos del usuario
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->role = $request->role;
-        $user->is_active = $request->is_active;
-
-        // Solo actualizamos la contraseña si el campo no está vacío
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+        // 2. Si se subió una nueva foto
+        if ($request->hasFile('photo')) {
+            // Borramos la foto anterior, si existe
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            // Guardamos la nueva foto y obtenemos su ruta
+            $path = $request->file('photo')->store('profile-photos', 'public');
+            // Actualizamos la ruta en el modelo del usuario
+            $user->profile_photo_path = $path;
         }
 
+        // 3. Actualizamos los demás datos del usuario
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->role = $validatedData['role'];
+        $user->is_active = $validatedData['is_active'];
+
+        // Solo actualizamos la contraseña si el campo no está vacío
+        if (!empty($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
+        }
+
+        // 4. Guardamos todos los cambios en la base de datos
         $user->save();
         
         return redirect()->route('admin.users.index')->with('success', 'Usuario actualizado exitosamente.');
