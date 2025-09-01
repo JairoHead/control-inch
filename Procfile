@@ -1,2 +1,2 @@
 release: php artisan config:clear && php artisan view:clear && php artisan cache:clear
-start: node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)
+web: heroku-php-nginx -C nginx_app.conf public/
