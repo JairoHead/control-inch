@@ -1,1 +1,2 @@
-web: php artisan migrate --force && php artisan storage:link && php artisan optimize:clear && node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)
+release: php artisan migrate --force && php artisan storage:link && php artisan optimize:clear
+start: node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)
