@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -53,12 +54,14 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn () => $this->profile_photo_path
-                        ? \Illuminate\Support\Facades\Storage::url($this->profile_photo_path)
+                        // Si existe una foto, genera la URL pública
+                        ? Storage::url($this->profile_photo_path)
+                        // Si no, genera un avatar con las iniciales
                         : $this->defaultProfilePhotoUrl(),
         );
     }
 
-    protected function defaultProfilePhotoUrl()
+     protected function defaultProfilePhotoUrl()
     {
         $name = trim(collect(explode(' ', $this->name))->map(function ($segment) {
             return mb_substr($segment, 0, 1);
