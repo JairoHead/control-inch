@@ -39,6 +39,17 @@ Route::get('/mostrar-foto/orden/{filename}', function ($filename) {
     return response()->file(storage_path('app/public/' . $path));
 })->name('orden.mostrar_foto');
 
+Route::get('/mostrar-foto/perfil/{filename}', function ($filename) {
+    // Buscamos en la carpeta de fotos de perfil
+    $path = 'profile-photos/' . $filename;
+
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    
+return response()->file(storage_path('app/public/' . $path));
+
+})->name('perfil.mostrar_foto');
 // --- GRUPO DE RUTAS QUE REQUIEREN AUTENTICACIÓN ---
 Route::middleware(['auth', 'verified'])->group(function () {
 

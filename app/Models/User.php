@@ -51,15 +51,22 @@ class User extends Authenticatable
         ];
     }
     protected function profilePhotoUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->profile_photo_path
-                        // Si existe una foto, genera la URL pública
-                        ? Storage::url($this->profile_photo_path)
-                        // Si no, genera un avatar con las iniciales
-                        : $this->defaultProfilePhotoUrl(),
-        );
-    }
+{
+    return Attribute::make(
+        get: function () {
+            if ($this->profile_photo_path) {
+                // Obtenemos solo el nombre del archivo
+                $filename = basename($this->profile_photo_path);
+                
+                // Generamos la URL usando nuestra NUEVA ruta segura
+                return route('perfil.mostrar_foto', ['filename' => $filename]);
+            }
+            
+            // Si no hay foto, generamos el avatar con las iniciales
+            return $this->defaultProfilePhotoUrl();
+        }
+    );
+}
 
      protected function defaultProfilePhotoUrl()
     {

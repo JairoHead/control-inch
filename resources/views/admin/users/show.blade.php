@@ -26,6 +26,19 @@
                         </a>
                     </div>
                 </div>
+                <div class="flex flex-col items-center sm:flex-row sm:items-center mb-6">
+                    <img class="h-24 w-24 rounded-full object-cover bg-gray-200" 
+                         src="{{ $user->profile_photo_url }}" 
+                         alt="Foto de perfil de {{ $user->name }}">
+                    
+                    <div class="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+                        {{-- Ya no repetimos el nombre y email aquí, ya están arriba o abajo --}}
+                        <p class="text-md text-gray-600 dark:text-gray-400">
+                            {{-- Mantenemos el email aquí para que esté junto a la foto --}}
+                            {{ $user->email }}
+                        </p>
+                    </div>
+                </div>
 
                 {{-- Sección de Detalles del Usuario --}}
                 <div>
