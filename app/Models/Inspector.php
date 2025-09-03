@@ -12,32 +12,19 @@ class Inspector extends Model
 
     protected $table = 'inspectores'; // Nombre de tu tabla
 
-    /**
-     * The attributes that are mass assignable.
-     * AJUSTA ESTOS CAMPOS SEGÚN TU TABLA 'inspectores'
-     */
     protected $fillable = [
         'dni',
         'nombres',
         'apellido_paterno',
         'apellido_materno',
         'nro_celular',
-        // ¿Algún otro campo como 'codigo_inspector', 'email', 'telefono'? Añádelo aquí.
     ];
 
-    /**
-     * Indica si el modelo debe gestionar timestamps (created_at, updated_at).
-     * Ponlo en 'false' si NO existen en tu tabla.
-     * Recuerda que SoftDeletes necesita 'deleted_at'.
-     */
+
     public $timestamps = false; // <-- Ajusta si tienes created/updated_at
 
-    /**
-     * Los atributos que deben ser casteados.
-     * SoftDeletes maneja 'deleted_at' automáticamente.
-     *
-     * @var array
-     */
+
+  
     protected $casts = [
         // 'deleted_at' => 'datetime',
     ];

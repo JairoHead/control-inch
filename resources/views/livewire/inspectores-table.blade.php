@@ -45,6 +45,9 @@
                             <th scope="col" wire:click="sortBy('apellido_paterno')" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
                                 Nombre Completo @include('partials._sort-icon', ['field' => 'apellido_paterno'])
                             </th>
+                            <th scope="col" wire:click="sortBy('nro_celular')" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
+                                Celular @include('partials._sort-icon', ['field' => 'nro_celular'])
+                            </th>
                             <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>
@@ -60,6 +63,7 @@
                             <tr class="odd:bg-gray-200 dark:odd:bg-gray-700 even:bg-white dark:even:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/30" wire:key="inspector-{{ $inspector->id }}">
                                 <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $inspector->dni }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $inspector->nombre_completo ?? ($inspector->nombres.' '.$inspector->apellido_paterno) }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $inspector->nro_celular ?? '-' }}</td> 
                                 <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium space-x-3">
                                     {{-- Botones estándar con SVGs restaurados --}}
                                     <a href="{{ route('inspectores.show', $inspector) }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300" title="Ver Detalles">
