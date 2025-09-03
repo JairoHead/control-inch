@@ -25,13 +25,8 @@
                         <div>
                             <label class="form-label">Foto de Perfil <span class="text-gray-500 text-xs">(Opcional)</span></label>
                             <div class="mt-2 flex items-center gap-x-4">
-                                <img 
-                                id="photo_preview" 
-                                src="{{ $user->profile_photo_path 
-                                        ? Storage::url($user->profile_photo_path) 
-                                        : asset('images/default-avatar.png') }}" 
-                                alt="Vista previa" 
-                                class="h-20 w-20 rounded-full object-cover bg-gray-200">
+                                <img src="{{ $user->profile_photo_path ? asset('storage/' . $user->profile_photo_path) : asset('images/default-avatar.png') }}" alt="{{ $user->name }}" class="h-24 w-24 rounded-full object-cover">
+
                                 <div>
                                     <input id="photo" name="photo" type="file" class="form-input-file" accept="image/jpeg,image/png,image/jpg">
                                     <p class="text-xs text-gray-500 mt-1">PNG, JPG hasta 2MB.</p>
