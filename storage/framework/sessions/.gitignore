@@ -1,2 +1,3 @@
+# storage/framework/sessions/.gitignore
 *
 !.gitignore
