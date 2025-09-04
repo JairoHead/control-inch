@@ -1,1 +1,1 @@
-start: node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)
+web: mkdir -p bootstrap/cache && chmod -R 775 bootstrap/cache storage && php artisan storage:link || true && node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)
