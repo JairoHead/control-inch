@@ -1,2 +1,5 @@
+# Ignorar todo en esta carpeta
 *
 !.gitignore
+!ordenes_fotos/
+!profile_photos/
