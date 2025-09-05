@@ -33,24 +33,53 @@ Route::get('/', function () {
 
 Route::get('/mostrar-foto/orden/{filename}', function ($filename) {
     $path = 'ordenes_fotos/' . $filename;
-    if (!Storage::disk('public')->exists($path)) {
-        abort(404);
-    }
-    return response()->file(storage_path('app/public/' . $path));
-})->name('orden.mostrar_foto');
-
-
-Route::get('/mostrar-foto/perfil/{filename}', function ($filename) {
-    // Buscamos en la carpeta de fotos de perfil
-    $path = 'profile-photos/' . $filename;
-
+    
     if (!Storage::disk('public')->exists($path)) {
         abort(404);
     }
     
-return response()->file(storage_path('app/public/' . $path));
+    $fullPath = storage_path('app/public/' . $path);
+    return response()->file($fullPath);
+})->name('orden.mostrar_foto');
 
+Route::get('/mostrar-foto/perfil/{filename}', function ($filename) {
+    // Buscar en múltiples ubicaciones posibles
+    $possiblePaths = [
+        'profile-photos/' . $filename,
+        'profiles/' . $filename,
+        'perfil/' . $filename,
+        $filename  // En caso esté en la raíz
+    ];
+
+    foreach ($possiblePaths as $path) {
+        if (Storage::disk('public')->exists($path)) {
+            $fullPath = storage_path('app/public/' . $path);
+            return response()->file($fullPath);
+        }
+    }
+    
+    // Log para debugging
+    Log::info('Foto de perfil no encontrada: ' . $filename, [
+        'paths_checked' => $possiblePaths,
+        'storage_path' => storage_path('app/public'),
+        'files_in_storage' => Storage::disk('public')->allFiles()
+    ]);
+    
+    abort(404);
 })->name('perfil.mostrar_foto');
+
+// Ruta temporal para debugging
+Route::get('/debug-storage', function () {
+    return [
+        'storage_path' => storage_path(),
+        'public_path' => public_path(),
+        'storage_app_public' => storage_path('app/public'),
+        'storage_link_exists' => file_exists(public_path('storage')),
+        'storage_link_target' => is_link(public_path('storage')) ? readlink(public_path('storage')) : 'no es link',
+        'storage_files' => Storage::disk('public')->allFiles(),
+        'storage_disk_path' => Storage::disk('public')->path(''),
+    ];
+})->middleware(['auth']);
 
 // --- GRUPO DE RUTAS QUE REQUIEREN AUTENTICACIÓN ---
 Route::middleware(['auth', 'verified'])->group(function () {
