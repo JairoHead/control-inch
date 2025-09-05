@@ -31,37 +31,21 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/mostrar-foto/perfil/{filename}', function ($filename) {
-    // Buscar primero en la nueva ubicación, luego en la antigua
-    $paths = [
-        'uploads/profile-photos/' . $filename,  // Nueva ubicación
-        'profile-photos/' . $filename           // Ubicación antigua
-    ];
-    
-    foreach ($paths as $path) {
-        if (Storage::disk('public')->exists($path)) {
-            return response()->file(storage_path('app/public/' . $path));
-        }
-    }
-    
-    abort(404);
-})->name('perfil.mostrar_foto');
-
 Route::get('/mostrar-foto/orden/{filename}', function ($filename) {
-    // Buscar primero en la nueva ubicación, luego en la antigua
-    $paths = [
-        'uploads/ordenes_fotos/' . $filename,   // Nueva ubicación
-        'ordenes_fotos/' . $filename            // Ubicación antigua
-    ];
-    
-    foreach ($paths as $path) {
-        if (Storage::disk('public')->exists($path)) {
-            return response()->file(storage_path('app/public/' . $path));
-        }
+    $path = 'uploads/ordenes_fotos/' . $filename;
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
     }
-    
-    abort(404);
+    return response()->file(storage_path('app/public/' . $path));
 })->name('orden.mostrar_foto');
+
+Route::get('/mostrar-foto/perfil/{filename}', function ($filename) {
+    $path = 'uploads/profile-photos/' . $filename;
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    return response()->file(storage_path('app/public/' . $path));
+})->name('perfil.mostrar_foto');
 
 // --- GRUPO DE RUTAS QUE REQUIEREN AUTENTICACIÓN ---
 Route::middleware(['auth', 'verified'])->group(function () {
