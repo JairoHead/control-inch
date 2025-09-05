@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class FotoOrden extends Model
 {
@@ -18,10 +19,17 @@ class FotoOrden extends Model
     }
 
     // Accesor para obtener la URL de esta foto
-    protected function url(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->path ? route('orden.mostrar_foto', ['filename' => basename($this->path)]) : null,
-        );
-    }
+   protected function url(): Attribute
+{
+    return Attribute::make(
+        get: function () { // Usamos una función anónima completa para mayor claridad
+            if ($this->path) {
+                // Asumiendo que $this->path guarda la ruta relativa al disco 'public',
+                // por ejemplo: 'uploads/ordenes_fotos/nombre_de_la_orden.jpg'
+                return Storage::url($this->path);
+            }
+            return null; // O una imagen por defecto si no hay path
+        }
+    );
+}
 }
