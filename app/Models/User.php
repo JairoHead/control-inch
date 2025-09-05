@@ -55,11 +55,8 @@ class User extends Authenticatable
     return Attribute::make(
         get: function () {
             if ($this->profile_photo_path) {
-                // Obtenemos solo el nombre del archivo
-                $filename = basename($this->profile_photo_path);
-                
-                // Generamos la URL usando nuestra NUEVA ruta segura
-                return route('perfil.mostrar_foto', ['filename' => $filename]);
+                // Usar storage directamente en lugar de ruta personalizada
+                return asset('storage/' . $this->profile_photo_path);
             }
             
             // Si no hay foto, generamos el avatar con las iniciales
