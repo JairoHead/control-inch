@@ -108,7 +108,7 @@ class UserController extends Controller
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
             // Guardamos la nueva foto y obtenemos su ruta
-            $path = $request->file('photo')->store('profile-photos', 'public');
+            $path = $request->file('photo')->store('uploads/profile-photos', 'public');
             // Actualizamos la ruta en el modelo del usuario
             $user->profile_photo_path = $path;
         }

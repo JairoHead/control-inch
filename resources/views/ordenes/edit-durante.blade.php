@@ -284,7 +284,6 @@
         </div>
     </div>
 </div>
-
 </form>
 
     {{-- SECCIÓN SEPARADA E INDEPENDIENTE PARA LAS FOTOS YA GUARDADAS --}}

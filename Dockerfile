@@ -44,7 +44,6 @@ COPY --from=php-build /app /app
 # Copiar assets compilados desde Node
 COPY --from=node-build /app/public/build /app/public/build
 
-
 # Configurar Nginx y Supervisor
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -55,7 +54,8 @@ RUN mkdir -p /app/storage/app/public \
     && mkdir -p /app/storage/framework/cache \
     && mkdir -p /app/storage/framework/sessions \
     && mkdir -p /app/storage/framework/views \
-    && mkdir -p /app/bootstrap/cache
+    && mkdir -p /app/bootstrap/cache \
+    && mkdir -p /app/public/livewire
 
 # Configurar permisos
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
@@ -73,14 +73,26 @@ php artisan cache:clear || true\n\
 php artisan route:clear || true\n\
 php artisan view:clear || true\n\
 \n\
+# Publicar assets de Livewire con más robustez\n\
+php artisan livewire:publish --assets || echo "WARNING: Failed to publish Livewire assets"\n\
+php artisan vendor:publish --tag=livewire:assets || echo "Alternative Livewire publish failed"\n\
+\n\
 # Recrear cachés\n\
 php artisan config:cache\n\
 php artisan route:cache\n\
 php artisan view:cache\n\
 \n\
-# Crear enlace simbólico\n\
+# Crear enlace simbólico para storage (con ruta absoluta)\n\
 rm -f /app/public/storage\n\
-php artisan storage:link\n\
+ln -sfn /app/storage/app/public /app/public/storage || echo "WARNING: Failed to create storage link"\n\
+\n\
+# Verificar que el enlace se creó\n\
+if [ -L /app/public/storage ]; then\n\
+    echo "✓ Storage link created successfully"\n\
+else\n\
+    echo "✗ Storage link failed, creating directory structure"\n\
+    mkdir -p /app/public/storage/uploads\n\
+fi\n\
 \n\
 # Verificar permisos\n\
 chown -R www-data:www-data /app/storage /app/bootstrap/cache\n\
