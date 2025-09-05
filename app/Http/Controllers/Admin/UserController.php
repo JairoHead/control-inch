@@ -57,7 +57,7 @@ class UserController extends Controller
 
         // 3. Si se subió una foto, la guardamos y añadimos la ruta a los datos
         if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('profile-photos', 'public');
+            $path = $request->file('photo')->store('uploads/profile-photos', 'public');
             $userData['profile_photo_path'] = $path;
         }
 

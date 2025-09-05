@@ -339,7 +339,7 @@ class OrdenController extends Controller
         foreach ($request->file('fotos') as $file) {
             if ($file->isValid()) {
                 // Guardamos el archivo en el disco 'public'
-                $path = $file->store('ordenes_fotos', 'public');
+                $path = $file->store('uploads/ordenes_fotos', 'public');
                 
                 // Creamos un nuevo registro en la tabla 'foto_ordens' asociado a esta orden
                 $orden->fotos()->create(['path' => $path]);
