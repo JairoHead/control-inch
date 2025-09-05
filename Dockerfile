@@ -46,7 +46,7 @@ COPY --from=node-build /app/public/build /app/public/build
 
 # PUBLICAR ASSETS DE LIVEWIRE
 # Esto copiará los archivos JS y CSS de Livewire a public/vendor/livewire
-RUN php artisan livewire:publish --assets --force
+RUN php artisan livewire:publish --assets
 
 # Configurar Nginx y Supervisor
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
