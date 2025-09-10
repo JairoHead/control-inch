@@ -61,8 +61,16 @@
                             <tr class="odd:bg-gray-200 dark:odd:bg-gray-700 even:bg-white dark:even:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900/30" wire:key="inspector-{{ $inspector->id }}">
                                 <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $inspector->dni }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $inspector->nombre_completo ?? ($inspector->nombres.' '.$inspector->apellido_paterno) }}</td>
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $inspector->nro_celular ?? '-' }}</td> 
-                                <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium space-x-3">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                    @if($inspector->nro_celular)
+                                        <a href="tel:{{ $inspector->nro_celular }}" 
+                                        class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline transition-colors duration-200">
+                                            {{ $inspector->nro_celular }}
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400">N/A</span>
+                                    @endif
+                                </td>                                <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium space-x-3">
                                     {{-- Botones estándar con SVGs restaurados --}}
                                     <a href="{{ route('inspectores.show', $inspector) }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300" title="Ver Detalles">
                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>

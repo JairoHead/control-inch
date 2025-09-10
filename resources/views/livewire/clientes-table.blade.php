@@ -45,7 +45,7 @@
                             <th scope="col" wire:click="sortBy('apellido_paterno')" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
                                 Nombre Completo @include('partials._sort-icon', ['field' => 'apellido_paterno'])
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Celular</th> {{-- Cabecera Celular --}}
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Celular</th>
                             <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>
@@ -62,8 +62,16 @@
                                 <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $cliente->dni }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $cliente->nombre_completo ?? ($cliente->nombres.' '.$cliente->apellido_paterno) }}</td>
                                 {{-- Celda Celular --}}
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $cliente->nro_celular ?? '-' }}</td>
-                                <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium space-x-3">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                    @if($cliente->nro_celular)
+                                        <a href="tel:{{ $cliente->nro_celular }}" 
+                                        class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline transition-colors duration-200">
+                                            {{ $cliente->nro_celular }}
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400">N/A</span>
+                                    @endif
+                                </td>                                <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium space-x-3">
                                     {{-- Botones con SVGs completos --}}
                                     <a href="{{ route('clientes.show', $cliente) }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300" title="Ver Detalles">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
