@@ -3,7 +3,7 @@
     {{-- Panel/Tarjeta Blanca --}}
     <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
         {{-- Padding interno --}}
-        <div class="p-6 sm:p-8"> {{-- 2. Div para Padding Interno --}}
+        <div class="px-6 py-4 sm:px-8 sm:py-4"> 
 
             {{-- Encabezado de la Sección --}}
             <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
@@ -35,7 +35,7 @@
              @endif
 
             {{-- Contenedor Tabla --}}
-            <div class="overflow-x-auto mt-6">
+            <div class="overflow-x-auto mt-4">
                 <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                     <thead class="bg-blue-900 dark:bg-blue-950">
                         <tr>

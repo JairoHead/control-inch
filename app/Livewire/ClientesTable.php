@@ -2,22 +2,21 @@
 
 namespace App\Livewire;
 
-use App\Models\Cliente; // <-- Cambiado a Cliente
+use App\Models\Cliente;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ClientesTable extends Component // <-- Nombre de clase cambiado
+class ClientesTable extends Component
 {
     use WithPagination;
 
     protected $paginationTheme = 'tailwind';
 
     public string $searchTerm = '';
-    public string $sortField = 'apellido_paterno'; // Ordenar por apellido por defecto
+    public string $sortField = 'apellido_paterno';
     public string $sortDirection = 'asc';
 
-    // Escucha por evento para refrescar (si creas/editas clientes con Livewire más adelante)
-    // protected $listeners = ['clienteUpdated' => '$refresh'];
+    protected $validSortFields = ['dni', 'nombres', 'apellido_paterno', 'apellido_materno', 'nro_celular'];
 
     public function updatingSearchTerm(): void
     {
@@ -26,50 +25,62 @@ class ClientesTable extends Component // <-- Nombre de clase cambiado
 
     public function sortBy(string $field): void
     {
+        if (!in_array($field, $this->validSortFields)) {
+            $field = 'apellido_paterno';
+        }
+
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
+            $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-        // Permitir ordenar por campos relacionados (si fuera necesario en el futuro)
-        // if (str_contains($field, '.')) {
-        //     // Lógica para ordenar por relación
-        // } else {
-             $this->sortField = $field;
-        // }
         $this->resetPage();
     }
 
     public function render()
     {
-        $query = Cliente::query(); // <-- Cambiado a Cliente
+        $query = Cliente::query();
 
-        // Búsqueda en campos de Cliente
-        $query->when(strlen($this->searchTerm) >= 1, function ($q) {
-            $term = '%' . $this->searchTerm . '%';
-            return $q->where(function ($subQuery) use ($term) {
-                $subQuery->where('dni', 'like', $term)
-                         ->orWhere('nombres', 'like', $term)
-                         ->orWhere('apellido_paterno', 'like', $term)
-                         ->orWhere('apellido_materno', 'like', $term)
-                         ->orWhere('nro_celular', 'like', $term); // <-- Añadido celular a la búsqueda
-            });
-        });
+        // --- Lógica de Búsqueda Flexible "todas las palabras en cualquier campo" ---
+        if (strlen($this->searchTerm) >= 1) {
+            // Dividir el término de búsqueda en palabras individuales
+            $searchTerms = preg_split('/\s+/', $this->searchTerm, -1, PREG_SPLIT_NO_EMPTY);
 
-        // Ordenamiento (verifica si estos campos existen en tu tabla clientes)
+            foreach ($searchTerms as $term) {
+                $term = '%' . $term . '%'; // Añadir comodines para cada palabra
+
+                $query->where(function ($subQuery) use ($term) {
+                    $subQuery->where('dni', 'like', $term)
+                             ->orWhere('nombres', 'like', $term)
+                             ->orWhere('apellido_paterno', 'like', $term)
+                             ->orWhere('apellido_materno', 'like', $term)
+                             ->orWhere('nro_celular', 'like', $term);
+                             // Añade aquí cualquier otro campo donde quieras buscar
+                             // ->orWhere('email', 'like', $term);
+                });
+            }
+        }
+        // --- Fin Lógica de Búsqueda ---
+
+
+        // Lógica de Ordenamiento
         $query->orderBy($this->sortField, $this->sortDirection);
+
+        if ($this->sortField !== 'apellido_paterno') {
+            $query->orderBy('apellido_paterno', 'asc');
+        }
         if ($this->sortField !== 'apellido_materno') {
-            $query->orderBy('apellido_materno', $this->sortDirection === 'asc' ? 'asc' : 'desc');
+            $query->orderBy('apellido_materno', 'asc');
         }
-         if ($this->sortField !== 'nombres') {
-            $query->orderBy('nombres', $this->sortDirection === 'asc' ? 'asc' : 'desc');
+        if ($this->sortField !== 'nombres') {
+            $query->orderBy('nombres', 'asc');
         }
 
-        // Paginación
-        $clientes = $query->paginate(15); // <-- Cambiado a $clientes
+        $clientes = $query->paginate(15);
 
-        return view('livewire.clientes-table', [ // <-- Apunta a la nueva vista livewire
-            'clientes' => $clientes, // <-- Pasa la variable $clientes
+        return view('livewire.clientes-table', [
+            'clientes' => $clientes,
         ]);
     }
 }

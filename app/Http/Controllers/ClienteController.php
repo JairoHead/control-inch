@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Log; // Para logging
 class ClienteController extends Controller
 {
     /** Muestra lista de clientes */
-    public function index(Request $request) // Preparado para Livewire o búsqueda tradicional
+    public function index(Request $request) 
     {
        
-        return view('clientes.index'); // Asume que aquí se carga @livewire('clientes-table')
+        return view('clientes.index'); 
     }
 
     /** Muestra formulario de creación */

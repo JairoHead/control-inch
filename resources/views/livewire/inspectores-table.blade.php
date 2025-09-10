@@ -3,7 +3,7 @@
     {{-- Panel/Tarjeta Blanca CON el diseño visual deseado --}}
     <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
         {{-- Padding interno --}}
-        <div class="p-6 sm:p-8">
+        <div class="px-6 py-4 sm:px-8 sm:py-4"> 
 
             {{-- Encabezado de la Sección --}}
             <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
@@ -35,7 +35,7 @@
              @endif
 
             {{-- Contenedor Tabla --}}
-            <div class="overflow-x-auto mt-6">
+            <div class="overflow-x-auto mt-4">
                 <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                     <thead class="bg-blue-900 dark:bg-blue-950">
                         <tr>
@@ -45,9 +45,7 @@
                             <th scope="col" wire:click="sortBy('apellido_paterno')" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
                                 Nombre Completo @include('partials._sort-icon', ['field' => 'apellido_paterno'])
                             </th>
-                            <th scope="col" wire:click="sortBy('nro_celular')" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
-                                Celular @include('partials._sort-icon', ['field' => 'nro_celular'])
-                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Celular</th>
                             <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>

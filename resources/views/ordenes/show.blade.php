@@ -57,7 +57,7 @@
 
             {{-- Sección Información General y Cliente/Inspector --}}
             <div class="mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Información General (Fase Antes)</h2>
+                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Datos de Inspección</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 text-sm">
                     <div><strong class="text-gray-500 dark:text-gray-400">Contrato:</strong> {{ $orden->contrato ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Nro. Inspección:</strong> {{ $orden->num_insp ?? 'N/A' }}</div>
@@ -67,8 +67,17 @@
                     <div><strong class="text-gray-500 dark:text-gray-400">OV:</strong> {{ $orden->ov ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Inspector:</strong> {{ $orden->inspector->nombre_completo ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Cliente:</strong> {{ $orden->cliente->nombre_completo ?? 'N/A' }}</div>
-                    <div><strong class="text-gray-500 dark:text-gray-400">Celular Cliente:</strong> {{ $orden->cliente->nro_celular ?? 'N/A' }}</div>
-                    <div><strong class="text-gray-500 dark:text-gray-400">Contacto Designado:</strong> {{ $orden->nombre_contacto ?? 'N/A' }}</div>
+                    <div>
+                        <strong class="text-gray-500 dark:text-gray-400">Celular Cliente:</strong> 
+                        @if($orden->cliente->nro_celular)
+                            <a href="tel:{{ $orden->cliente->nro_celular }}" 
+                            class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline transition-colors duration-200">
+                                {{ $orden->cliente->nro_celular }}
+                            </a>
+                        @else
+                            <span class="text-gray-400">N/A</span>
+                        @endif
+                    </div>                    <div><strong class="text-gray-500 dark:text-gray-400">Contacto Designado:</strong> {{ $orden->nombre_contacto ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Atributo:</strong> {{ $orden->atributo ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">CC:</strong> {{ $orden->cc ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Departamento:</strong> {{ $orden->departamento->nombre ?? ($orden->departamento->departamento ?? 'N/A') }}</div>
@@ -110,7 +119,7 @@
             {{-- Sección Datos de Campo (Fase Durante) --}}
             <div class="mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
                 {{-- ... (contenido sin cambios) ... --}}
-                 <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Datos Registrados en Campo (Fase Durante)</h2>
+                 <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Datos de Campo</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 text-sm">
                     <div><strong class="text-gray-500 dark:text-gray-400">Tipo Trabajo:</strong> {{ $orden->tipo_trabajo ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Pago Proyecto:</strong> {{ $orden->pago_proyecto ?? 'N/A' }}</div>
@@ -177,7 +186,7 @@
 
                         {{-- Sección Datos de Cierre (Fase Despues) - SIEMPRE VISIBLE --}}
                         <div class="mb-6">
-                            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Datos de Cierre (Fase Despues)</h2>
+                            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Datos de Cierre</h2>
            
                             {{-- Sub-sección: Datos Generales de Cierre (los que ya tenías) --}}
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 text-sm mb-6">

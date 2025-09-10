@@ -16,11 +16,14 @@
     @if (session()->has('success')) <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">{{ session('success') }}</div> @endif
     @if (session()->has('error')) <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">{{ session('error') }}</div> @endif
 
-    <div class="overflow-x-auto mt-6">
+    {{-- Indicador de carga Livewire --}}
+    <div class="overflow-x-auto mt-4">
         <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
             <thead class="bg-blue-900 text-white dark:bg-blue-950">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nombre</th>
+                    <th scope="col" wire:click="sortBy('name')" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
+                    Nombre @include('partials._sort-icon', ['field' => 'name'])
+                    </th>
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Email</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Rol</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Estado</th>

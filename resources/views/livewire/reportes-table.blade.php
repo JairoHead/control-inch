@@ -9,7 +9,7 @@
         </div>
 
         {{-- Panel de Filtros y Búsqueda --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
             <div class="lg:col-span-2">
                 <label for="search-reportes" class="sr-only">Buscar</label>
                 <input type="search" id="search-reportes" wire:model.live.debounce.300ms="searchTerm" placeholder="Buscar por Orden, Usuario, Plantilla..." class="form-input w-full">
@@ -48,17 +48,23 @@
         @endif
 
         {{-- TABLA DE REPORTES --}}
-        <div class="overflow-x-auto">
+            <div class="overflow-x-auto mt-4">
             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                 <thead class="bg-blue-900 dark:bg-blue-950 text-white">
-                    <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Orden</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Plantilla Utilizada</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Generado por</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Fecha de Generación</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nombre del Archivo</th>
-                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider">Acciones</th>
-                    </tr>
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Orden</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Plantilla Utilizada</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Generado por:</th>
+
+                <th scope="col" wire:click="sortBy('created_at')" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer group hover:bg-blue-800 dark:hover:bg-blue-900">
+                    Fecha de Generación @include('partials._sort-icon', ['field' => 'created_at'])
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-white dark:text-gray-200 uppercase tracking-wider">Nombre del Archivo</th>
+
+                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider">
+                    Acciones
+                </th>
+            </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
                     <tr wire:loading.delay.long>

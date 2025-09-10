@@ -1,8 +1,8 @@
 <div>
     {{-- Panel/Tarjeta Blanca --}}
     <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
-        {{-- Padding interno --}}
-        <div class="p-6 sm:p-8">
+        {{-- Padding interno 6 y 8--}}
+        <div class="px-6 py-4 sm:px-8 sm:py-4"> 
 
             {{-- Encabezado de la Sección --}}
             <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
@@ -29,7 +29,7 @@
              @if (session()->has('error')) <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded"> {{ session('error') }} </div> @endif
 
             {{-- Contenedor Tabla --}}
-            <div class="mt-6 border border-gray-200 dark:border-gray-700 rounded-lg">
+            <div class="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg">
 
             <div class="overflow-auto" style="max-height: 70vh;">
                 <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
