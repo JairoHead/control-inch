@@ -38,7 +38,7 @@ class Orden extends Model
         // Campos Fase "Durante"
         'tipo_trabajo', 'pago_proyecto', 'ancho_pasaje', 'num_poste',
         'dist_murete_pto_venta', 'dist_predio_pto_venta', 'dist_predio_pasaje', 'cp',
-        'suministro_existente', 'tipo_acometida', 'ubicacion_medidor',
+        'suministro_existente', 'suministro_izquierdo', 'suministro_derecho', 'tipo_acometida', 'ubicacion_medidor',
         'req_caja_paso', 'req_permiso_mun', 'req_coord_entidad', 'incumplimiento_dms',
         'uso_servicio', 'contacto', 'contacto_otro', 'tiene_nicho', 'observacion', 'cantidad_suministros',
 

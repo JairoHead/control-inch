@@ -106,6 +106,16 @@
                     @error('suministro_existente') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="suministro_izquierdo">Suministro Izquierdo</label>
+                    <input class="form-input" id="suministro_izquierdo" type="text" name="suministro_izquierdo" value="{{ old('suministro_izquierdo', $orden->suministro_izquierdo) }}">
+                    @error('suministro_izquierdo') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="suministro_derecho">Suministro Derecho</label>
+                    <input class="form-input" id="suministro_derecho" type="text" name="suministro_derecho" value="{{ old('suministro_derecho', $orden->suministro_derecho) }}">
+                    @error('suministro_derecho') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
                     <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="tipo_acometida">Tipo Acometida</label>
                     <select name="tipo_acometida" id="tipo_acometida" class="form-select">
                         <option value="">-- Seleccione --</option>

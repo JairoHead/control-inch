@@ -132,7 +132,12 @@
                         <div>
                             <label class="form-label" for="tipo">Tipo</label>
                             <select name="tipo" id="tipo" class="form-select @error('tipo') input-error @enderror">
-                                <option value="">-- Seleccione --</option> <option value="NUEVO SUMINISTRO" {{ old('tipo', $orden->tipo) == 'NUEVO SUMINISTRO' ? 'selected' : '' }}>Nuevo Suministro</option> <option value="INCREMENTO" {{ old('tipo', $orden->tipo) == 'INCREMENTO' ? 'selected' : '' }}>Incremento</option> <option value="TRASLADO" {{ old('tipo', $orden->tipo) == 'TRASLADO' ? 'selected' : '' }}>Traslado</option>
+                                <option value="">-- Seleccione --</option> 
+                                <option value="NUEVO SUMINISTRO" {{ old('tipo', $orden->tipo) == 'NUEVO SUMINISTRO' ? 'selected' : '' }}>Nuevo Suministro</option> 
+                                <option value="INCREMENTO" {{ old('tipo', $orden->tipo) == 'INCREMENTO' ? 'selected' : '' }}>Incremento</option> 
+                                <option value="TRASLADO" {{ old('tipo', $orden->tipo) == 'TRASLADO' ? 'selected' : '' }}>Traslado</option>
+                                <option value="CNX MULTIPLE" {{ old('tipo', $orden->tipo) == 'CNX MULTIPLE' ? 'selected' : '' }}>Cnx Multiple</option>
+                                <option value="AFECTACION" {{ old('tipo', $orden->tipo) == 'AFECTACION' ? 'selected' : '' }}>Afectación</option> 
                             </select> @error('tipo') <p class="form-error-message">{{ $message }}</p> @enderror
                         </div>
                     </div>

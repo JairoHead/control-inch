@@ -131,6 +131,11 @@
                     <div><strong class="text-gray-500 dark:text-gray-400">Centro Poblado:</strong> {{ $orden->cp ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Cantidad de Suministros</strong> {{ $orden->cantidad_suministros ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Suministro Existente:</strong> {{ $orden->suministro_existente ?? 'N/A' }}</div>
+                    <div><strong class="text-gray-500 dark:text-gray-400">Suministro Izquierdo:</strong> {{ $orden->suministro_izquierdo ?? 'N/A' }}</div>
+                    <div><strong class="text-gray-500 dark:text-gray-400">Suministro Derecho:</strong> {{ $orden->suministro_derecho ?? 'N/A' }}</div>
+                    <div><strong class="text-gray-500 dark:text-gray-400">Nro. Medidor:</strong> {{ $orden->nro_medidor ?? 'N/A' }}</div>
+                    <div><strong class="text-gray-500 dark:text-gray-400">Fecha Instalación:</strong> {{ $orden->fecha_instalacion ? $orden->fecha_instalacion->format('d/m/Y') : 'N/A' }}</div>
+                    <div><strong class="text-gray-500 dark:text-gray-400">Ubicación Medidor:</strong> {{ $orden->ubicacion_medidor ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Tipo Acometida:</strong> {{ $orden->tipo_acometida ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Ubicación Medidor:</strong> {{ $orden->ubicacion_medidor ?? 'N/A' }}</div>
                     <div><strong class="text-gray-500 dark:text-gray-400">Req. Caja Paso:</strong> {{ $orden->req_caja_paso ? 'Sí' : 'No' }}</div>
