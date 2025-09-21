@@ -83,101 +83,83 @@ class ReporteController extends Controller
             }
         }
 
-// =====================================================================
-// ============ TEST: SIN PROCESAMIENTO DE IMÁGENES DINÁMICAS =============
-// =====================================================================
-
-$fotos = $orden->fotos;
-
-// COMENTAMOS TODA LA LÓGICA DE IMÁGENES DINÁMICAS
-// Solo eliminamos el bloque si existe, sin procesar imágenes
-if ($fotos->count() > 0) {
-    try {
-        // En lugar de procesar imágenes, solo ponemos texto
-        $templateProcessor->cloneBlock('bloque_fotos', $fotos->count());
+        // =====================================================================
+        // ============ INICIO: LÓGICA DE IMÁGENES (TAMAÑO AJUSTADO) =============
+        // =====================================================================
         
-        foreach ($fotos as $index => $foto) {
-            // Solo texto, sin imágenes
-            $templateProcessor->setValue('foto#' . ($index + 1), 'FOTO #' . ($index + 1) . ': ' . $foto->nombre_archivo);
+        $fotos = $orden->fotos;
+
+        if ($fotos->count() > 0) {
+$templateProcessor->cloneBlock('bloque_fotos', $fotos->count());
+
+            foreach ($fotos as $index => $foto) {
+                $rutaImagen = Storage::disk('public')->path($foto->path);
+                
+                if (file_exists($rutaImagen)) {
+                    // --- LÓGICA DE TAMAÑO DINÁMICO ---
+                    // Definimos un ancho máximo para la página (aprox. 15cm en Word)
+                    $maxWidthCm = 15;
+                    $maxWidthPx = $maxWidthCm * 37.795; // Conversión aproximada de cm a pixels
+
+                    // Opciones para la imagen
+                    $imageOptions = [
+                        'path' => $rutaImagen,
+                        'ratio' => true // ¡MUY IMPORTANTE! Mantiene la proporción
+                    ];
+
+                    // Obtenemos las dimensiones de la imagen original
+                    list($width, $height) = getimagesize($rutaImagen);
+
+                    // Comparamos si es horizontal o vertical
+                    if ($width > $height) {
+                        // Si es horizontal, la ajustamos al ancho máximo
+                        $imageOptions['width'] = $maxWidthPx . 'px';
+                    } else {
+                        // Si es vertical o cuadrada, la hacemos un poco más pequeña
+                        // para que no ocupe toda la altura de la página.
+                        $imageOptions['width'] = ($maxWidthPx * 0.7) . 'px'; // Ej. 70% del ancho máximo
+                    }
+                    
+                    // Reemplazamos la imagen con las nuevas opciones de tamaño
+                    $templateProcessor->setImageValue('foto#' . ($index + 1), $imageOptions);
+
+                } else {
+                    $templateProcessor->setValue('foto#' . ($index + 1), '[IMAGEN NO ENCONTRADA]');
+                }
+            }
+        } else {
+            $templateProcessor->deleteBlock('bloque_fotos');
         }
-    } catch (\Exception $e) {
-        Log::error("Error procesando bloque de fotos: " . $e->getMessage());
-        $templateProcessor->deleteBlock('bloque_fotos');
+
+        // ===================================================================
+        // ============== FIN: LÓGICA DE IMÁGENES (TAMAÑO AJUSTADO) ============
+        // ===================================================================
+
+        // 8. Generar el nombre del archivo final y guardarlo temporalmente.
+        $nombreArchivoFinal = 'Reporte-Orden-' . $orden->id . '-' . date('Ymd_His') . '.docx';
+        $tempPath = storage_path('app/temp_reports');
+        if (!is_dir($tempPath)) {
+            mkdir($tempPath, 0755, true);
+        }
+        $rutaGuardado = $tempPath . DIRECTORY_SEPARATOR . $nombreArchivoFinal;
+        $templateProcessor->saveAs($rutaGuardado);
+
+        // 9. Guardar registro de reporte generado
+        try {
+            ReporteGenerado::create([
+                'orden_id' => $orden->id,
+                'user_id' => Auth::id(),
+                'plantilla_reporte_id' => $plantilla->id,
+                'nombre_archivo_generado' => $nombreArchivoFinal,
+            ]);
+            Log::info("Se registró el reporte '{$nombreArchivoFinal}' para la orden #{$orden->id} por el usuario #" . Auth::id());
+        } catch (\Exception $e) {
+            Log::error("Fallo al registrar el reporte generado para la orden #{$orden->id}: " . $e->getMessage());
+        }
+        
+        // 10. Forzar la descarga del archivo y eliminarlo del servidor después de enviarlo.
+        return response()->download($rutaGuardado)->deleteFileAfterSend(true);
     }
-} else {
-    try {
-        $templateProcessor->deleteBlock('bloque_fotos');
-    } catch (\Exception $e) {
-        Log::warning("No se pudo eliminar bloque_fotos: " . $e->getMessage());
-    }
-}
-
-// ===================================================================
-// ============== FIN: TEST SIN IMÁGENES ============
-// ===================================================================
-
-// 8. Generar el nombre del archivo final y guardarlo temporalmente.
-$nombreArchivoFinal = 'TEST-Reporte-Orden-' . $orden->id . '-' . date('Ymd_His') . '.docx';
-$tempPath = storage_path('app/temp_reports');
-if (!is_dir($tempPath)) {
-    mkdir($tempPath, 0755, true);
-}
-$rutaGuardado = $tempPath . DIRECTORY_SEPARATOR . $nombreArchivoFinal;
-
-try {
-    // Limpiar buffer
-    if (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    $templateProcessor->saveAs($rutaGuardado);
-    
-    if (!file_exists($rutaGuardado) || filesize($rutaGuardado) == 0) {
-        Log::error("El archivo no se generó correctamente: $rutaGuardado");
-        return back()->with('error', 'Error al generar el reporte');
-    }
-    
-    Log::info("TEST - Archivo generado exitosamente. Tamaño: " . filesize($rutaGuardado) . " bytes");
-    
-} catch (\Exception $e) {
-    Log::error("Error al guardar el archivo: " . $e->getMessage());
-    return back()->with('error', 'Error al procesar el reporte: ' . $e->getMessage());
-}
-
-// 9. Guardar registro de reporte generado
-try {
-    ReporteGenerado::create([
-        'orden_id' => $orden->id,
-        'user_id' => Auth::id(),
-        'plantilla_reporte_id' => $plantilla->id,
-        'nombre_archivo_generado' => $nombreArchivoFinal,
-    ]);
-    Log::info("TEST - Se registró el reporte '{$nombreArchivoFinal}' para la orden #{$orden->id} por el usuario #" . Auth::id());
-} catch (\Exception $e) {
-    Log::error("Fallo al registrar el reporte generado para la orden #{$orden->id}: " . $e->getMessage());
-}
-
-// 10. Descarga
-try {
-    if (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    return response()->download($rutaGuardado, $nombreArchivoFinal, [
-        'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'Content-Disposition' => 'attachment; filename="' . $nombreArchivoFinal . '"',
-    ])->deleteFileAfterSend(true);
-    
-} catch (\Exception $e) {
-    Log::error("Error en la descarga: " . $e->getMessage());
-    return back()->with('error', 'Error al descargar el reporte');
-
-    
-} catch (\Exception $e) {
-    Log::error("Error en la descarga: " . $e->getMessage());
-    return back()->with('error', 'Error al descargar el reporte');
-}
-}
 
     public function destroy(ReporteGenerado $reporte)
     {
