@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ReporteGenerado;
+
 class ReporteController extends Controller
 {
     
@@ -17,6 +18,7 @@ class ReporteController extends Controller
     {
         return view('reportes.index');
     }
+    
     public function getPlantillasPorTipo($tipoTrabajo)
     {
         $plantillas = PlantillaReporte::where('tipo_trabajo', $tipoTrabajo)
@@ -29,7 +31,7 @@ class ReporteController extends Controller
     /**
      * Genera y descarga el reporte de una orden específica.
      */
-        public function generarReporte(Request $request, Orden $orden)
+    public function generarReporte(Request $request, Orden $orden)
     {
         // 1. Validar el input.
         $validated = $request->validate([
@@ -71,7 +73,6 @@ class ReporteController extends Controller
         }
         $templateProcessor->setValue('detalle_contacto', $detalleContacto);
 
-        
         $fechaGeneracion = now()->format('d/m/Y');
         $templateProcessor->setValue('fecha_generacion', $fechaGeneracion);
         
@@ -84,165 +85,117 @@ class ReporteController extends Controller
         }
 
         // =====================================================================
-// ============ CÓDIGO OPTIMIZADO PARA PhpWord 1.2.0 =============
-// =====================================================================
+        // ============ LÓGICA DE IMÁGENES USANDO TABLAS =============
+        // =====================================================================
 
-$fotos = $orden->fotos;
+        $fotos = $orden->fotos;
 
-if ($fotos->count() > 0) {
-    try {
-        // En PhpWord 1.2.0 usar solo cloneBlock sin parámetros adicionales
-        $templateProcessor->cloneBlock('bloque_fotos', $fotos->count());
+        if ($fotos->count() > 0) {
+            try {
+                // CAMBIO CLAVE: usar cloneRow en lugar de cloneBlock
+                $templateProcessor->cloneRow('foto', $fotos->count());
 
-        foreach ($fotos as $index => $foto) {
-            $rutaImagen = Storage::disk('public')->path($foto->path);
-            
-            if (file_exists($rutaImagen)) {
-                // Verificar que sea una imagen válida
-                $imageInfo = getimagesize($rutaImagen);
-                if ($imageInfo !== false && $imageInfo[0] > 0 && $imageInfo[1] > 0) {
+                foreach ($fotos as $index => $foto) {
+                    $rutaImagen = Storage::disk('public')->path($foto->path);
                     
-                    // Configuración específica para PhpWord 1.2.0
-                    $imageOptions = [
-                        'path' => $rutaImagen,
-                        'width' => 300,    // Tamaño fijo en píxeles
-                        'height' => 200,   // Tamaño fijo en píxeles
-                        'ratio' => true,   // Mantener proporción
-                        'positioning' => 'relative'  // Para 1.2.0
-                    ];
-                    
-                    // Usar setImageValue con el placeholder correcto
-                    $templateProcessor->setImageValue('foto#' . ($index + 1), $imageOptions);
-                    
-                    Log::info("Imagen procesada: {$foto->path} - Tamaño original: {$imageInfo[0]}x{$imageInfo[1]}");
-                    
-                } else {
-                    Log::warning("Archivo no es una imagen válida: $rutaImagen");
-                    $templateProcessor->setValue('foto#' . ($index + 1), '[FORMATO DE IMAGEN INVÁLIDO]');
+                    if (file_exists($rutaImagen)) {
+                        $imageInfo = getimagesize($rutaImagen);
+                        if ($imageInfo !== false && $imageInfo[0] > 0 && $imageInfo[1] > 0) {
+                            
+                            // Configuración para tabla
+                            $imageOptions = [
+                                'path' => $rutaImagen,
+                                'width' => 400,    // Ajusta según tu necesidad
+                                'height' => 300,   // Ajusta según tu necesidad
+                                'ratio' => true
+                            ];
+                            
+                            // Para tablas: foto#1, foto#2, foto#3, etc.
+                            $templateProcessor->setImageValue('foto#' . ($index + 1), $imageOptions);
+                            
+                            Log::info("Imagen #" . ($index + 1) . " procesada en tabla: " . $foto->path);
+                            
+                        } else {
+                            Log::warning("Formato de imagen inválido: $rutaImagen");
+                            $templateProcessor->setValue('foto#' . ($index + 1), '[FORMATO DE IMAGEN INVÁLIDO]');
+                        }
+                    } else {
+                        Log::warning("Imagen no encontrada: $rutaImagen");
+                        $templateProcessor->setValue('foto#' . ($index + 1), '[IMAGEN NO ENCONTRADA]');
+                    }
                 }
-            } else {
-                Log::warning("Archivo de imagen no encontrado: $rutaImagen");
-                $templateProcessor->setValue('foto#' . ($index + 1), '[IMAGEN NO ENCONTRADA]');
+                
+                Log::info("Tabla de fotos procesada: {$fotos->count()} imágenes");
+                
+            } catch (\Exception $e) {
+                Log::error("Error al procesar tabla de imágenes: " . $e->getMessage());
+                
+                // En caso de error, llenar con mensajes de error
+                foreach ($fotos as $index => $foto) {
+                    $templateProcessor->setValue('foto#' . ($index + 1), '[ERROR AL CARGAR IMAGEN]');
+                }
             }
+        } else {
+            Log::info("No hay fotos para procesar en la orden {$orden->id}");
+            // Si no hay fotos, la fila de la tabla simplemente no se clonará
         }
-        
-        Log::info("Procesadas {$fotos->count()} imágenes para la orden {$orden->id}");
-        
-    } catch (\Exception $e) {
-        Log::error("Error al procesar bloque de imágenes: " . $e->getMessage());
-        Log::error("Stack trace: " . $e->getTraceAsString());
-        
-        // Si hay error, eliminar el bloque y continuar
+
+        // 8. Generar el nombre del archivo final y guardarlo temporalmente.
+        $nombreArchivoFinal = 'Reporte-Orden-' . $orden->id . '-' . date('Ymd_His') . '.docx';
+        $tempPath = storage_path('app/temp_reports');
+        if (!is_dir($tempPath)) {
+            mkdir($tempPath, 0755, true);
+        }
+        $rutaGuardado = $tempPath . DIRECTORY_SEPARATOR . $nombreArchivoFinal;
+
         try {
-            $templateProcessor->deleteBlock('bloque_fotos');
-            Log::info("Bloque de fotos eliminado debido a errores");
-        } catch (\Exception $deleteError) {
-            Log::warning("No se pudo eliminar bloque_fotos: " . $deleteError->getMessage());
+            // Limpiar output buffer
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+            
+            $templateProcessor->saveAs($rutaGuardado);
+            
+            if (!file_exists($rutaGuardado) || filesize($rutaGuardado) == 0) {
+                throw new \Exception("El archivo no se generó correctamente");
+            }
+            
+            Log::info("Documento generado exitosamente: " . filesize($rutaGuardado) . " bytes");
+            
+        } catch (\Exception $e) {
+            Log::error("Error al generar documento: " . $e->getMessage());
+            return back()->with('error', 'Error al generar el reporte: ' . $e->getMessage());
+        }
+
+        // 9. Guardar registro de reporte generado
+        try {
+            ReporteGenerado::create([
+                'orden_id' => $orden->id,
+                'user_id' => Auth::id(),
+                'plantilla_reporte_id' => $plantilla->id,
+                'nombre_archivo_generado' => $nombreArchivoFinal,
+            ]);
+            Log::info("Se registró el reporte '{$nombreArchivoFinal}' para la orden #{$orden->id}");
+        } catch (\Exception $e) {
+            Log::error("Error al registrar en BD: " . $e->getMessage());
+        }
+
+        // 10. Descarga
+        try {
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+            
+            return response()->download($rutaGuardado, $nombreArchivoFinal, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'Content-Disposition' => 'attachment; filename="' . $nombreArchivoFinal . '"',
+            ])->deleteFileAfterSend(true);
+            
+        } catch (\Exception $e) {
+            Log::error("Error en descarga: " . $e->getMessage());
+            return back()->with('error', 'Error al descargar el reporte');
         }
     }
-} else {
-    // No hay fotos, eliminar el bloque
-    try {
-        $templateProcessor->deleteBlock('bloque_fotos');
-        Log::info("Bloque de fotos eliminado - no hay imágenes");
-    } catch (\Exception $e) {
-        Log::info("Bloque 'bloque_fotos' no existe en la plantilla");
-    }
-}
-
-// ===================================================================
-// ============== GUARDADO Y DESCARGA PARA PhpWord 1.2.0 ============
-// ===================================================================
-
-// 8. Generar el nombre del archivo final y guardarlo temporalmente.
-$nombreArchivoFinal = 'Reporte-Orden-' . $orden->id . '-' . date('Ymd_His') . '.docx';
-$tempPath = storage_path('app/temp_reports');
-if (!is_dir($tempPath)) {
-    mkdir($tempPath, 0755, true);
-}
-$rutaGuardado = $tempPath . DIRECTORY_SEPARATOR . $nombreArchivoFinal;
-
-try {
-    // Limpiar cualquier output buffer activo
-    while (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    // Guardar el documento
-    $templateProcessor->saveAs($rutaGuardado);
-    
-    // Verificaciones post-guardado
-    if (!file_exists($rutaGuardado)) {
-        throw new \Exception("El archivo no se creó en la ruta esperada: $rutaGuardado");
-    }
-    
-    $fileSize = filesize($rutaGuardado);
-    if ($fileSize == 0) {
-        throw new \Exception("El archivo generado está vacío");
-    }
-    
-    if ($fileSize < 1000) {
-        throw new \Exception("El archivo generado es sospechosamente pequeño ({$fileSize} bytes)");
-    }
-    
-    Log::info("Documento generado exitosamente: {$nombreArchivoFinal} ({$fileSize} bytes)");
-    
-} catch (\Exception $e) {
-    Log::error("Error crítico al generar documento: " . $e->getMessage());
-    Log::error("Ruta de guardado: $rutaGuardado");
-    
-    // Limpiar archivo parcial si existe
-    if (file_exists($rutaGuardado)) {
-        unlink($rutaGuardado);
-    }
-    
-    return back()->with('error', 'Error al generar el reporte: ' . $e->getMessage());
-}
-
-// 9. Guardar registro de reporte generado
-try {
-    ReporteGenerado::create([
-        'orden_id' => $orden->id,
-        'user_id' => Auth::id(),
-        'plantilla_reporte_id' => $plantilla->id,
-        'nombre_archivo_generado' => $nombreArchivoFinal,
-    ]);
-    Log::info("Reporte registrado en BD: '{$nombreArchivoFinal}' para orden #{$orden->id}");
-} catch (\Exception $e) {
-    Log::error("Error al registrar en BD (no crítico): " . $e->getMessage());
-}
-
-// 10. Descarga optimizada para PhpWord 1.2.0
-try {
-    // Una última limpieza de buffer
-    while (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    // Headers específicos para documentos Word
-    $headers = [
-        'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'Content-Disposition' => 'attachment; filename="' . $nombreArchivoFinal . '"',
-        'Content-Length' => filesize($rutaGuardado),
-        'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-        'Pragma' => 'no-cache',
-        'Expires' => '0'
-    ];
-    
-    return response()->download($rutaGuardado, $nombreArchivoFinal, $headers)
-                     ->deleteFileAfterSend(true);
-    
-} catch (\Exception $e) {
-    Log::error("Error en descarga: " . $e->getMessage());
-    
-    // Limpiar archivo manualmente si la descarga falla
-    if (file_exists($rutaGuardado)) {
-        unlink($rutaGuardado);
-    }
-    
-    return back()->with('error', 'Error al descargar el reporte generado');
-}
-}
 
     public function destroy(ReporteGenerado $reporte)
     {
