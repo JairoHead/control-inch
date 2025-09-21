@@ -90,7 +90,7 @@ class ReporteController extends Controller
         $fotos = $orden->fotos;
 
         if ($fotos->count() > 0) {
-            $templateProcessor->cloneBlock('bloque_fotos', $fotos->count(), true, true);
+    $templateProcessor->cloneBlock('bloque_fotos', $fotos->count());
 
             foreach ($fotos as $index => $foto) {
                 $rutaImagen = Storage::disk('public')->path($foto->path);
