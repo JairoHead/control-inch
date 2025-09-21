@@ -83,15 +83,23 @@ class ReporteController extends Controller
             }
         }
 
-        // =====================================================================
-// ============ INICIO: LÓGICA DE IMÁGENES (TAMAÑO AJUSTADO) =============
+// =====================================================================
+// ============ INICIO: LÓGICA DE IMÁGENES (SOLUCIÓN PhpWord 1.3.0) =============
 // =====================================================================
 
 $fotos = $orden->fotos;
 
 if ($fotos->count() > 0) {
     try {
-        $templateProcessor->cloneBlock('bloque_fotos', $fotos->count());
+        // CAMBIO CRÍTICO: Usar cloneRow en lugar de cloneBlock para PhpWord 1.3.0
+        // Si tu plantilla usa una tabla para las fotos, usa cloneRow
+        // Si usa bloques, mantén cloneBlock pero con parámetros específicos
+        
+        // OPCIÓN 1: Si usas tabla en tu plantilla Word (recomendado)
+        $templateProcessor->cloneRow('foto', $fotos->count());
+        
+        // OPCIÓN 2: Si usas bloques (comentar la línea de arriba y descomentar esta)
+        // $templateProcessor->cloneBlock('bloque_fotos', $fotos->count(), true, false);
 
         foreach ($fotos as $index => $foto) {
             $rutaImagen = Storage::disk('public')->path($foto->path);
@@ -100,31 +108,15 @@ if ($fotos->count() > 0) {
                 // Verificar que sea una imagen válida
                 $imageInfo = getimagesize($rutaImagen);
                 if ($imageInfo !== false) {
-                    // --- LÓGICA DE TAMAÑO DINÁMICO ---
-                    // Definimos un ancho máximo para la página (aprox. 15cm en Word)
-                    $maxWidthCm = 15;
-                    $maxWidthPx = $maxWidthCm * 37.795; // Conversión aproximada de cm a pixels
-
-                    // Opciones para la imagen
+                    // --- CONFIGURACIÓN SIMPLIFICADA PARA PhpWord 1.3.0 ---
                     $imageOptions = [
                         'path' => $rutaImagen,
-                        'ratio' => true // ¡MUY IMPORTANTE! Mantiene la proporción
+                        'width' => 400,  // Valor fijo en píxeles (sin 'px')
+                        'height' => 300, // Valor fijo en píxeles (sin 'px')
+                        'ratio' => false // CAMBIO IMPORTANTE: false para evitar bugs
                     ];
-
-                    // Obtenemos las dimensiones de la imagen original
-                    list($width, $height) = $imageInfo;
-
-                    // Comparamos si es horizontal o vertical
-                    if ($width > $height) {
-                        // Si es horizontal, la ajustamos al ancho máximo
-                        $imageOptions['width'] = (int)$maxWidthPx;
-                    } else {
-                        // Si es vertical o cuadrada, la hacemos un poco más pequeña
-                        // para que no ocupe toda la altura de la página.
-                        $imageOptions['width'] = (int)($maxWidthPx * 0.7); // Ej. 70% del ancho máximo
-                    }
                     
-                    // Reemplazamos la imagen con las nuevas opciones de tamaño
+                    // CAMBIO: Usar índice base 1 o base 0 según tu plantilla
                     $templateProcessor->setImageValue('foto#' . ($index + 1), $imageOptions);
                 } else {
                     Log::warning("Formato de imagen inválido: $rutaImagen");
@@ -137,15 +129,23 @@ if ($fotos->count() > 0) {
         }
     } catch (\Exception $e) {
         Log::error("Error procesando imágenes en reporte: " . $e->getMessage());
-        // Si hay error con las imágenes, eliminamos el bloque completo
-        $templateProcessor->deleteBlock('bloque_fotos');
+        // Eliminar el bloque/fila si hay problemas
+        try {
+            $templateProcessor->deleteBlock('bloque_fotos');
+        } catch (\Exception $deleteError) {
+            Log::warning("No se pudo eliminar bloque_fotos: " . $deleteError->getMessage());
+        }
     }
 } else {
-    $templateProcessor->deleteBlock('bloque_fotos');
+    try {
+        $templateProcessor->deleteBlock('bloque_fotos');
+    } catch (\Exception $e) {
+        Log::warning("No se pudo eliminar bloque_fotos vacío: " . $e->getMessage());
+    }
 }
 
 // ===================================================================
-// ============== FIN: LÓGICA DE IMÁGENES (TAMAÑO AJUSTADO) ============
+// ============== FIN: LÓGICA DE IMÁGENES ============
 // ===================================================================
 
 // 8. Generar el nombre del archivo final y guardarlo temporalmente.
@@ -157,6 +157,11 @@ if (!is_dir($tempPath)) {
 $rutaGuardado = $tempPath . DIRECTORY_SEPARATOR . $nombreArchivoFinal;
 
 try {
+    // CAMBIO IMPORTANTE: Limpiar el buffer antes de guardar
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
+    
     $templateProcessor->saveAs($rutaGuardado);
     
     // Verificar que el archivo se generó correctamente
@@ -169,7 +174,7 @@ try {
     
 } catch (\Exception $e) {
     Log::error("Error al guardar el archivo: " . $e->getMessage());
-    return back()->with('error', 'Error al procesar el reporte');
+    return back()->with('error', 'Error al procesar el reporte: ' . $e->getMessage());
 }
 
 // 9. Guardar registro de reporte generado
@@ -185,10 +190,25 @@ try {
     Log::error("Fallo al registrar el reporte generado para la orden #{$orden->id}: " . $e->getMessage());
 }
 
-// 10. Forzar la descarga del archivo y eliminarlo del servidor después de enviarlo.
-return response()->download($rutaGuardado, $nombreArchivoFinal, [
-    'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-])->deleteFileAfterSend(true);
+// 10. DESCARGA MEJORADA para PhpWord 1.3.0
+try {
+    // Limpiar cualquier output buffer
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
+    
+    return response()->download($rutaGuardado, $nombreArchivoFinal, [
+        'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Disposition' => 'attachment; filename="' . $nombreArchivoFinal . '"',
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        'Pragma' => 'no-cache',
+        'Expires' => '0'
+    ])->deleteFileAfterSend(true);
+    
+} catch (\Exception $e) {
+    Log::error("Error en la descarga: " . $e->getMessage());
+    return back()->with('error', 'Error al descargar el reporte');
+}
 }
 
     public function destroy(ReporteGenerado $reporte)
