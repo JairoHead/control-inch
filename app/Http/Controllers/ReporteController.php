@@ -73,20 +73,36 @@ class ReporteController extends Controller
         }
         $templateProcessor->setValue('detalle_contacto', $detalleContacto);
 
-        $fechaGeneracion = now()->format('d/m/Y');
+        $fechaGeneracion = now()->timezone('America/Lima')->format('d/m/Y H:i:s');
         $templateProcessor->setValue('fecha_generacion', $fechaGeneracion);
         
         // 7. Reemplazar datos directos de la ORDEN con un bucle mejorado.
-        foreach($orden->getAttributes() as $campo => $valor) {
-            $valorParaPlantilla = (is_null($valor) || $valor === '') ? 'N/A' : $valor;
-            if (is_scalar($valorParaPlantilla)) {
-                 $templateProcessor->setValue($campo, $valorParaPlantilla);
+
+           // Lista de campos booleanos que necesitan transformación
+            $camposBooleanos = ['tiene_nicho', 'req_caja_paso', 'req_permiso_mun'];//se pueden agregar más campos booleanos
+
+            $atributos = $orden->getAttributes();
+
+            foreach ($camposBooleanos as $campo) {
+                if (array_key_exists($campo, $atributos)) {
+                    if ($atributos[$campo] === 1 || $atributos[$campo] === '1') {
+                        $atributos[$campo] = 'sí';
+                    } elseif ($atributos[$campo] === 0 || $atributos[$campo] === '0') {
+                        $atributos[$campo] = 'no';
+                    } else {
+                        $atributos[$campo] = 'N/A';
+                    }
+                }
             }
-        }
-        // 7.b Reemplazar booleanos con texto
-        foreach ($orden->getBooleansTexto() as $campo => $valorTexto) {
-            $templateProcessor->setValue($campo, $valorTexto);
-        }
+
+            // $atributos en lugar de volver a llamar getAttributes()
+            foreach($atributos as $campo => $valor) {
+                $valorParaPlantilla = (is_null($valor) || $valor === '') ? 'N/A' : $valor;
+                if (is_scalar($valorParaPlantilla)) {
+                    $templateProcessor->setValue($campo, $valorParaPlantilla);
+                }
+            }
+        
         // =====================================================================
         // ============ LÓGICA DE IMÁGENES USANDO TABLAS =============
         // =====================================================================
