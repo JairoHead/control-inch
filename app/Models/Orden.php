@@ -134,6 +134,11 @@ class Orden extends Model
         return $this->hasMany(ReporteGenerado::class);
     }
 
+    public function getTieneNichoTextoAttribute()
+{
+    return $this->tiene_nicho === 1 ? 'SI' : ($this->tiene_nicho === 0 ? 'NO' : '');
+}
+
     // --- Helpers de Estado ---
     public function estaPendiente() { return $this->estado === self::ESTADO_PENDIENTE; }
     public function estaEnCampo() { return $this->estado === self::ESTADO_EN_CAMPO; }
