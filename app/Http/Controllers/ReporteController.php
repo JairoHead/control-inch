@@ -105,8 +105,8 @@ class ReporteController extends Controller
                             // Configuración para tabla
                             $imageOptions = [
                                 'path' => $rutaImagen,
-                                'width' => 400,    // Ajusta según tu necesidad
-                                'height' => 300,   // Ajusta según tu necesidad
+                                'width' => 400,    
+                                'height' => 300,   
                                 'ratio' => true
                             ];
                             

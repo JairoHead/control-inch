@@ -9,7 +9,7 @@
                 {{-- Encabezado del formulario --}}
                 <div class="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
                     <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 text-center">
-                        Editar Orden #{{ $orden->id }} - Fase: Post-Campo (Después)
+                        Editar Orden #{{ $orden->id }} - Fase: Cierre
                     </h1>
                     <p class="text-center text-gray-600 dark:text-gray-400 mt-1">Estado Actual: <span class="font-semibold">{{ $orden->estado_legible }}</span></p>
                 </div>
@@ -124,31 +124,11 @@
                 return (dmr + lc).toFixed(2); // Ajusta el número de decimales (ej. 2 para 149.85)
             }
         }">
-
-        {{-- Input para el número de LLAVE (necesita x-ref) --}}
-        <div class="mb-6">
-            <label class="form-label" for="llave">Número de Llave</label>
-            <select class="form-select @error('llave') input-error @enderror"
-                    id="llave"
-                    name="llave"
-                    x-ref="llave_input" {{-- Mantenemos el x-ref para el encabezado dinámico --}}
-                    {{-- Si quieres que el cambio de este select afecte algo en Alpine, puedes añadir x-model aquí --}}
-                    {{-- Ejemplo: x-model="numeroDeLlaveSeleccionado" --}}
-                    >
-                <option value="">-- Seleccione Número de Llave --</option>
-                <option value="01" {{ old('llave', $orden->llave) == '01' ? 'selected' : '' }}>01</option>
-                <option value="02" {{ old('llave', $orden->llave) == '02' ? 'selected' : '' }}>02</option>
-                <option value="03" {{ old('llave', $orden->llave) == '03' ? 'selected' : '' }}>03</option>
-                {{-- Puedes añadir más opciones si es necesario, ej: "04", "05", etc. --}}
-                {{-- O generarlas dinámicamente si vienen de una lista --}}
-            </select>
-            @error('llave') <p class="form-error-message">{{ $message }}</p> @enderror
-        </div>
-
-
         {{-- SECCIÓN LLAVE --}}
         <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1 mt-6">
-            LLAVE - <span class="text-blue-600 dark:text-blue-400" x-text="$refs.llave_input && $refs.llave_input.value ? $refs.llave_input.value : 'XX'"></span>
+            LLAVE - <span class="text-blue-600 dark:text-blue-400">
+                {{ $orden->llave ?? 'XX' }}
+            </span>
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6 border dark:border-gray-700 p-4 rounded-md shadow-sm">
             @php
@@ -227,18 +207,11 @@
         </div>
         </div>
 
-
-        {{-- Input para el Código TRAFO (necesita x-ref) --}}
-        <div class="mb-6">
-            <label class="form-label" for="codigo_trafo">Código Trafo (Ej: 05692C)</label>
-            <input class="form-input @error('codigo_trafo') input-error @enderror" id="codigo_trafo" type="text" name="codigo_trafo"
-                value="{{ old('codigo_trafo', $orden->codigo_trafo) }}" x-ref="codigo_trafo_input" placeholder="Ej: 05692C">
-            @error('codigo_trafo') <p class="form-error-message">{{ $message }}</p> @enderror
-        </div>
-
         {{-- SECCIÓN TRAFO --}}
         <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1 mt-6">
-            TRAFO - <span class="text-blue-600 dark:text-blue-400" x-text="$refs.codigo_trafo_input && $refs.codigo_trafo_input.value ? $refs.codigo_trafo_input.value : 'XXXXXX'"></span>
+            TRAFO - <span class="text-blue-600 dark:text-blue-400">
+                {{ $orden->codigo_trafo ?? 'XXXXXX' }}
+            </span>
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6 border dark:border-gray-700 p-4 rounded-md shadow-sm">
             @php
@@ -481,6 +454,7 @@
                 const mapa = {
                     'CANT': 'cantidad_suministros', // Necesitas añadir este campo a tu tabla `ordenes`
                     'TIPO ACOM': 'tipo_acometida',
+                    'SIST ACOM': 'sistema_acometida',
                     'C.C.': 'cc',
                     'N° POSTE': 'num_poste',
                     'DIST. MURETE AL PTO VENTA': 'dist_murete_pto_venta',

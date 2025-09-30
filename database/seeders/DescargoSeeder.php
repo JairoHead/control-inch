@@ -17,6 +17,8 @@ class DescargoSeeder extends Seeder
     public function run(): void
     {
         // Limpiamos las tablas para evitar duplicados si ejecutamos el seeder de nuevo
+        // ejecutar php artisan db:seed --class=DescargoSeeder para cambios en el seeder de descargo
+        // con truncate elimina todos los registros para que se vuelvan a crear y evitamos duplicidad
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DescargoTipo::truncate();
         DescargoParte1::truncate();
@@ -28,9 +30,9 @@ class DescargoSeeder extends Seeder
         $tipoSinReforma = DescargoTipo::create(['nombre' => 'Sin Reforma']);
 
         DescargoParte1::insert([
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/sin reforma de red BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/sin reforma de red BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/sin reforma de red BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/sin reforma de red BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/sin reforma de red BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/sin reforma de red BT/Cnx. subterránea/'],
         ]);
 
         DescargoParte2::insert([
@@ -47,24 +49,24 @@ class DescargoSeeder extends Seeder
         ]);
         
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => '(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja de paso/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F1+3B3/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F2+3B3/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja de paso existente/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja bornera existente para derivación de acometidas del poste #(N° POSTE)/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja de paso/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja de paso/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F1 en banco de medidores/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F1 en banco de medidores/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja de paso existente/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja de paso existente/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja bornera existente para derivación de acometidas del poste #(N° POSTE)/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja bornera existente para derivación de acometidas del poste #(N° POSTE)/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja F1 existente en banco de medidores/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja F1 existente en banco de medidores/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => '(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja de paso/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F1+3B3/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F2+3B3/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja de paso existente/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja bornera existente para derivación de acometidas del poste #(N° POSTE)/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja de paso/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja de paso/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F1 en banco de medidores/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'instalación de caja F1 en banco de medidores/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja de paso existente/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja de paso existente/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja bornera existente para derivación de acometidas del poste #(N° POSTE)/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja bornera existente para derivación de acometidas del poste #(N° POSTE)/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja F1 existente en banco de medidores/predio se encuentra a (Dist. Del predio en el int. Del pasaje) del ingreso del pasaje común/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinReforma->id, 'plantilla' => 'desde caja F1 existente en banco de medidores/predio se encuentra a (DIST. DEL PREDIO AL PTO DE VENTA) del punto de venta/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
 
@@ -77,21 +79,21 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 1 (asociados a "Con Extensión") ---
         DescargoParte1::insert([
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea BT/Cnx. subterránea/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red subterránea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red subterránea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red subterránea BT/Cnx. subterránea/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y subterránea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y subterránea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y subterránea BT/Cnx. subterránea/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea y  extensión subterránea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea y  extensión subterránea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea y  extensión subterránea BT/Cnx. subterránea/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y  reforma subterránea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y  reforma subterránea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y  reforma subterránea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red subterránea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red subterránea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red subterránea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y subterránea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y subterránea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y subterránea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea y  extensión subterránea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea y  extensión subterránea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea y  extensión subterránea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y  reforma subterránea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y  reforma subterránea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConExtension->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con extensión de red aérea y  reforma subterránea BT/Cnx. subterránea/'],
         ]);
 
         // --- DATOS PARA PARTE 2 (asociados a "Con Extensión") ---
@@ -127,12 +129,12 @@ class DescargoSeeder extends Seeder
 
         // --- DATOS PARA PARTE 1 (asociados a "Con Reforma") ---
         DescargoParte1::insert([
-            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea BT/Cnx. subterránea/'],
-            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red subterránea BT/Cnx. aérea/sin cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red subterránea BT/Cnx. aérea/con cruce de calle/'],
-            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (TIPO ACOM)Ø C.C.=(C.C.)kW/con reforma de red subterránea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red aérea BT/Cnx. subterránea/'],
+            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red subterránea BT/Cnx. aérea/sin cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red subterránea BT/Cnx. aérea/con cruce de calle/'],
+            ['descargo_tipo_id' => $tipoConReforma->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo suministro (SIST ACOM)Ø C.C.=(C.C.)kW/con reforma de red subterránea BT/Cnx. subterránea/'],
         ]);
 
         // --- DATOS PARA PARTE 2 (asociados a "Con Reforma") ---
@@ -157,20 +159,20 @@ class DescargoSeeder extends Seeder
 
         // --- DATOS PARA PARTE 1 (asociados a "Reforma Sustancial") ---
         DescargoParte1::insert([
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) sin reforma de red BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red aérea BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red subt. BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red aérea y subt. BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con reforma de red aérea y  extensión subt. BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red aérea y  reforma subt. BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea BT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red aérea MT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red subt. MT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea MT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red aérea BT y extensión de red aérea MT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red aérea BT y reforma de red aérea MT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea BT y extensión de red aérea MT/'],
-            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (TIPO ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea BT y reforma de red aérea MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) sin reforma de red BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red aérea BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red subt. BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red aérea y subt. BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con reforma de red aérea y  extensión subt. BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED)  con extensión de red aérea y  reforma subt. BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea BT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red aérea MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red subt. MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red aérea BT y extensión de red aérea MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con extensión de red aérea BT y reforma de red aérea MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea BT y extensión de red aérea MT/'],
+            ['descargo_tipo_id' => $tipoReformaSustancial->id, 'plantilla' => 'Es factible atender lo solicitado/(cant) nuevo sum. (SIST ACOM)Ø C.C.=(C.C.)kW/ con reforma sustancial Constr. de (SED) con reforma de red aérea BT y reforma de red aérea MT/'],
         ]);
 
         // --- DATOS PARA PARTE 2 (asociados a "Reforma Sustancial") ---
@@ -272,9 +274,9 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Zona no Electrificada") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoZonaNoElec->id, 'plantilla' => '(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoZonaNoElec->id, 'plantilla' => 'aprobado por la municipalidad correspondiente/a fin de evaluar atención/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoZonaNoElec->id, 'plantilla' => 'aprobado por la municipalidad correspondiente/a fin de evaluar posible ampliaciónde red BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoZonaNoElec->id, 'plantilla' => '(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoZonaNoElec->id, 'plantilla' => 'aprobado por la municipalidad correspondiente/a fin de evaluar atención/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoZonaNoElec->id, 'plantilla' => 'aprobado por la municipalidad correspondiente/a fin de evaluar posible ampliaciónde red BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -301,10 +303,10 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "No se Ubicó al Solicitante") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al posible predio/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al suministro de referencia/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al posible predio según foto de la fachada alcanzada como información/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al posible predio/se requiere croquis de ubicación detallado. A fin de atender nuevo sum. /(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al posible predio/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al suministro de referencia/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al posible predio según foto de la fachada alcanzada como información/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoNoUbicado->id, 'plantilla' => 'se llego al posible predio/se requiere croquis de ubicación detallado. A fin de atender nuevo sum. /(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -348,13 +350,13 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Vía no Definida") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => '(SED)A/LL-()/Alim. ().'],
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes. BT-SP/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes. BT-AP/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención con reforma BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención con reforma y extensión de red BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => '(SED)/LL-()/Alim. ().'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes. BT-SP/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes. BT-AP/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención con reforma BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención con reforma y extensión de red BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
             // Nota: La última plantilla estaba duplicada, la he omitido. Si la necesitas, simplemente descomenta la siguiente línea.
             // ['descargo_tipo_id' => $tipoViaNoDefinida->id, 'plantilla' => 'a fin de evaluar atención con reforma BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
@@ -381,7 +383,7 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Sin Personal Idóneo") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoSinPersonal->id, 'plantilla' => 'para el funcionamiento correcto con la nueva potencia/caja F1 esta con reja y candado/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinPersonal->id, 'plantilla' => 'para el funcionamiento correcto con la nueva potencia/caja F1 esta con reja y candado/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -415,8 +417,8 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Información Insuficiente") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoInfoInsuficiente->id, 'plantilla' => 'a fin de evaluar atención /(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoInsuficiente->id, 'plantilla' => 'mejorar croquis de ubicación/a fin de evaluar atención /(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoInsuficiente->id, 'plantilla' => 'a fin de evaluar atención /(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoInsuficiente->id, 'plantilla' => 'mejorar croquis de ubicación/a fin de evaluar atención /(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -458,16 +460,16 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Información Incoherente") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'a fin de evaluar atención/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes BT-AP/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes. BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'ultimo poste BT existente aparentemente no cumple DMS/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'requerido por presentar viviendas que aparentemente invaden vía pública/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'presencia de red BT que incumplen DMS/Contacto no contesta las llamadas/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/a fin de evaluar posible ampliación de redes BT-AP/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/a fin de evaluar atención con posible reforma de redes BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/instalar hitos perimetricos en ambos lados de la calle/a fin de evaluar atención con posible reforma de redes BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/se requiere números activos para coordinaciones en campo/ a fin de evaluar atención con posible reforma de redes BT/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'a fin de evaluar atención/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes BT-AP/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'a fin de evaluar posible ampliación de redes. BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'ultimo poste BT existente aparentemente no cumple DMS/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'requerido por presentar viviendas que aparentemente invaden vía pública/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'presencia de red BT que incumplen DMS/Contacto no contesta las llamadas/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/a fin de evaluar posible ampliación de redes BT-AP/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/a fin de evaluar atención con posible reforma de redes BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/instalar hitos perimetricos en ambos lados de la calle/a fin de evaluar atención con posible reforma de redes BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoInfoIncoherente->id, 'plantilla' => 'vías no definidas y/o habilitadas/se requiere números activos para coordinaciones en campo/ a fin de evaluar atención con posible reforma de redes BT/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -492,8 +494,8 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Sin Acceso Libre") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoSinAcceso->id, 'plantilla' => 'a fin de evaluar una posible atención en pared al ingreso del pasaje/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoSinAcceso->id, 'plantilla' => 'a fin de evaluar una posible atención en murete al ingreso del pasaje/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinAcceso->id, 'plantilla' => 'a fin de evaluar una posible atención en pared al ingreso del pasaje/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSinAcceso->id, 'plantilla' => 'a fin de evaluar una posible atención en murete al ingreso del pasaje/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -520,8 +522,8 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "En Franja de servidumbre") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoFranjaServidumbre->id, 'plantilla' => 'por lo que no esta cumpliendo distancia mínima de seguridad/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
-            ['descargo_tipo_id' => $tipoFranjaServidumbre->id, 'plantilla' => '(SED)A / Ll-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoFranjaServidumbre->id, 'plantilla' => 'por lo que no esta cumpliendo distancia mínima de seguridad/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoFranjaServidumbre->id, 'plantilla' => '(SED)/ Ll-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -546,7 +548,7 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "En Zona Arqueológica") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoZonaArqueologica->id, 'plantilla' => '(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoZonaArqueologica->id, 'plantilla' => '(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -590,7 +592,7 @@ class DescargoSeeder extends Seeder
 
         // --- DATOS PARA PARTE 2 (asociados a "Desiste del Trámite") ---
         DescargoParte2::insert([
-            ['descargo_tipo_id' => $tipoDesiste->id, 'plantilla' => '(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoDesiste->id, 'plantilla' => '(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
         
         // --- DATOS PARA PARTE 3 (asociados a "Desiste del Trámite") ---
@@ -609,7 +611,7 @@ class DescargoSeeder extends Seeder
 
         // --- DATOS PARA PARTE 1 (asociados a "Supeditado") ---
         DescargoParte1::insert([
-            ['descargo_tipo_id' => $tipoSupeditado->id, 'plantilla' => 'Es factible atender lo solicitado/(01) nuevo sum. (TIPO ACOM)Ø c.c.= (C.C.) kW/'],
+            ['descargo_tipo_id' => $tipoSupeditado->id, 'plantilla' => 'Es factible atender lo solicitado/(01) nuevo sum. (SIST ACOM)Ø c.c.= (C.C.) kW/'],
         ]);
 
         // --- DATOS PARA PARTE 2 (asociados a "Supeditado") ---
@@ -619,7 +621,7 @@ class DescargoSeeder extends Seeder
         
         // --- DATOS PARA PARTE 3 (asociados a "Supeditado") ---
         DescargoParte3::insert([
-            ['descargo_tipo_id' => $tipoSupeditado->id, 'plantilla' => 'Cnx aéreo/fachada/(SED)A/LL-(LLAVE)/Alim. (ALIM.).'],
+            ['descargo_tipo_id' => $tipoSupeditado->id, 'plantilla' => 'Cnx aéreo/fachada/(SED)/LL-(LLAVE)/Alim. (ALIM.).'],
         ]);
 
         // =========================================================================
@@ -638,7 +640,7 @@ class DescargoSeeder extends Seeder
             ['descargo_tipo_id' => $tipoEspecial->id, 'plantilla' => 'Presencia de cerco perimétrico y portón, impide la libre operación y mantenimiento de la red MT y puesto de medición. Por lo que se requiere Plano perimétrico y corte Vial aprobada por la Municipalidad de Chancay, aledaña a la vía nacional carretera panamericana norte km 83.6. Con la finalidad de identificar y definir punto de entrega. Ref: radio PMI 0716 /Alim. .'],
             ['descargo_tipo_id' => $tipoEspecial->id, 'plantilla' => '2.Existe antecedentes de nivel de tensión por debajo del mínimo normado, por lo que se sugiere levantar el TAP de la  en 230 V. en horas fuera punta o se va a requerir una reforma integral de instalación de Sed.'],
             ['descargo_tipo_id' => $tipoEspecial->id, 'plantilla' => 'Con corte de Via presentado con ancho de vereda 1.0m no es tecnicamente posible realizar la extensión de la red BT aérea/Se sugiere que vuelva a tramitarlo con la posibilidad de proyección de vereda de un mínimo de 1.5 m /Volver a presentar corte de vía y plano de lotización aprobado por la Municipalidad correspondiente.'],
-            ['descargo_tipo_id' => $tipoEspecial->id, 'plantilla' => 'Posible afectación de predios hacia la vía pública / se requiere plano perimétrico y de lotización en donde se encuentra el predio y de sus vecinos colindantes y corte de vía aprobado por la municipalidad correspondiente / a fin de evaluar atención/(SED)A/LL-()/Alim. ().'],
+            ['descargo_tipo_id' => $tipoEspecial->id, 'plantilla' => 'Posible afectación de predios hacia la vía pública / se requiere plano perimétrico y de lotización en donde se encuentra el predio y de sus vecinos colindantes y corte de vía aprobado por la municipalidad correspondiente / a fin de evaluar atención/(SED)/LL-()/Alim. ().'],
         ]);
 
         // --- DATOS PARA PARTE 2 (asociados a "Descargo Especial") ---

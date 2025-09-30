@@ -9,8 +9,11 @@
                 {{-- Encabezado del formulario --}}
                 <div class="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
                     <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 text-center">
-                        Editar Orden #{{ $orden->id }} - Fase: Trabajo en Campo (Durante)
+                        Editar Orden #{{ $orden->id }} - Fase: Campo
                     </h1>
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 text-center mt-2">
+                        Cliente: {{ $orden->cliente->nombre_completo ?? 'N/A' }}
+                    </h2>
                     <p class="text-center text-gray-600 dark:text-gray-400 mt-1">Estado Actual: <span class="font-semibold">{{ $orden->estado_legible }}</span></p>
                 </div>
     @include('partials.flash-messages')
@@ -249,6 +252,32 @@
                                x-bind:required="selectedContacto === 'otro'"> {{-- Hacerlo 'required' en HTML5 si es 'otro' --}}
                         @error('contacto_otro') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
                     </div>
+                </div>
+                {{-- Input para el número de LLAVE (necesita x-ref) --}}
+                <div class="mb-6">
+                    <label class="form-label" for="llave">Número de Llave</label>
+                    <select class="form-select @error('llave') input-error @enderror"
+                            id="llave"
+                            name="llave"
+                            x-ref="llave_input" {{-- Mantenemos el x-ref para el encabezado dinámico --}}
+                            {{-- Si quieres que el cambio de este select afecte algo en Alpine, puedes añadir x-model aquí --}}
+                            {{-- Ejemplo: x-model="numeroDeLlaveSeleccionado" --}}
+                            >
+                        <option value="">-- Seleccione Número de Llave --</option>
+                        <option value="01" {{ old('llave', $orden->llave) == '01' ? 'selected' : '' }}>01</option>
+                        <option value="02" {{ old('llave', $orden->llave) == '02' ? 'selected' : '' }}>02</option>
+                        <option value="03" {{ old('llave', $orden->llave) == '03' ? 'selected' : '' }}>03</option>
+                        {{-- Puedes añadir más opciones si es necesario, ej: "04", "05", etc. --}}
+                        {{-- O generarlas dinámicamente si vienen de una lista --}}
+                    </select>
+                    @error('llave') <p class="form-error-message">{{ $message }}</p> @enderror
+                </div>
+                {{-- Input para el Código TRAFO (necesita x-ref) --}}
+                <div class="mb-6">
+                    <label class="form-label" for="codigo_trafo">Código Trafo (Ej: 05692C)</label>
+                    <input class="form-input @error('codigo_trafo') input-error @enderror" id="codigo_trafo" type="text" name="codigo_trafo"
+                        value="{{ old('codigo_trafo', $orden->codigo_trafo) }}" x-ref="codigo_trafo_input" placeholder="Ej: 05692C">
+                    @error('codigo_trafo') <p class="form-error-message">{{ $message }}</p> @enderror
                 </div>
             </div>
 

@@ -242,10 +242,13 @@ class OrdenController extends Controller
                     'contacto' => ['nullable', 'string', 
                     Rule::in(['cliente', 'hijo del cliente', 'sobrino del cliente', 'esposo del cliente', 'inquilino del cliente', 'contacto del cliente', 'otro'])],
                     'contacto_otro' => ['nullable', 'string', 'max:255', 'required_if:contacto,otro'],
+                    'llave' => ['nullable', 'string', 
+                    Rule::in(['01', '02', '03'])],
+                    'codigo_trafo' => ['nullable', 'string', 'max:50'],                    
                     'observacion' => ['nullable', 'string', 'max:2000'],
                     'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
                 ];
-                if ($action === 'finalizar_campo' && $orden->estaEnCampo()) {
+                if ($orden->estaEnCampo()) {
                     $newState = Orden::ESTADO_POST_CAMPO;
                     $successMessage = 'Fase Durante guardada. Orden finalizada en campo.';
                 } else {
@@ -258,8 +261,6 @@ class OrdenController extends Controller
                 $rules = [
                     'fecha_drive_satel' => ['nullable', 'date'],
                     'fecha_scm' => ['nullable', 'date'],
-                    'llave' => ['nullable', 'string', 
-                    Rule::in(['01', '02', '03'])],
                     'cable_matriz' => ['nullable', 'string', 
                     Rule::in([
                         '2x16+Pmm²', '3x25+Pmm²', '3x35+Pmm²', '3x50+Pmm²', '3x70+Pmm²', '3x95+Pmm²',
@@ -282,7 +283,6 @@ class OrdenController extends Controller
                     'llave_ir_valor' => ['nullable', 'numeric'],
                     'llave_ic_valor' => ['nullable', 'numeric'],
                     'llave_ip_valor' => ['nullable', 'numeric'],
-                    'codigo_trafo' => ['nullable', 'string', 'max:50'],
                     'trafo_pta' => ['nullable', 'string', 'max:100'],
                     'trafo_vr' => ['nullable', 'string', 'max:100'],
                     'trafo_dmr_valor' => ['nullable', 'numeric'],
@@ -299,7 +299,7 @@ class OrdenController extends Controller
                 if ($action === 'completar_orden' && $orden->estaEnPostCampo()) {
                     $newState = Orden::ESTADO_COMPLETADA;
                     $successMessage = '¡Orden completada exitosamente!';
-                } else if ($action === 'guardar_despues') {
+                } else {
                     $successMessage = 'Datos de Fase Después guardados.';
                 }
                 break;
