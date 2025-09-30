@@ -83,7 +83,10 @@ class ReporteController extends Controller
                  $templateProcessor->setValue($campo, $valorParaPlantilla);
             }
         }
-
+        // 7.b Reemplazar booleanos con texto
+        foreach ($orden->getBooleansTexto() as $campo => $valorTexto) {
+            $templateProcessor->setValue($campo, $valorTexto);
+        }
         // =====================================================================
         // ============ LÓGICA DE IMÁGENES USANDO TABLAS =============
         // =====================================================================

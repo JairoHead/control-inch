@@ -134,10 +134,29 @@ class Orden extends Model
         return $this->hasMany(ReporteGenerado::class);
     }
 
-    public function getTieneNichoTextoAttribute()
+/**
+ * Devuelve todos los campos booleanos convertidos a texto (SI/NO).
+ */
+public function getBooleansTexto(): array
 {
-    return $this->tiene_nicho === 1 ? 'SI' : ($this->tiene_nicho === 0 ? 'NO' : '');
+    $campos = [
+        'req_caja_paso',
+        'req_permiso_mun',
+        'req_coord_entidad',
+        'incumplimiento_dms',
+        'tiene_nicho',
+    ];
+
+    $resultado = [];
+    
+    foreach ($campos as $campo) {
+        $valor = $this->{$campo};
+        $resultado[$campo] = $valor === 1 ? 'SI' : ($valor === 0 ? 'NO' : 'N/A');
+    }
+
+    return $resultado;
 }
+
 
     // --- Helpers de Estado ---
     public function estaPendiente() { return $this->estado === self::ESTADO_PENDIENTE; }
