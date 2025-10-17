@@ -42,7 +42,8 @@ class ReporteController extends Controller
         $plantilla = PlantillaReporte::findOrFail($validated['plantilla_id']);
 
         // 3. Construir la ruta al archivo.
-        $rutaPlantilla = Storage::disk('public')->path('plantillas_reportes/' . $plantilla->nombre_archivo);
+        
+        $rutaPlantilla = resource_path('docs/plantillas_reportes/' . $plantilla->nombre_archivo);
         $rutaNormalizada = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $rutaPlantilla);
 
         // 4. Comprobar la existencia del archivo.
