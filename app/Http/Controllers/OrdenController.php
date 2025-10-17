@@ -11,28 +11,23 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
-
-
 
 class OrdenController extends Controller
 {
     /**
      * Muestra una lista de las órdenes.
      */
-
     public function index()
 {
-    DB::enableQueryLog();
-    
-    $ordenes = Orden::with(['cliente', 'inspector'])
+    // Cargar solo lo mínimo necesario
+    $ordenes = Orden::with(['cliente:id,nombre_completo', 'inspector:id,nombre_completo'])
+                    ->select('id', 'contrato', 'num_insp', 'estado', 'cliente_id', 'inspector_id', 'created_at')
                     ->latest()
                     ->paginate(15);
     
-    Log::info('Consultas ejecutadas:', DB::getQueryLog());
-    
     return view('ordenes.index', compact('ordenes'));
 }
+    
 
     /**
      * Muestra el formulario para la creación inicial de una orden.
