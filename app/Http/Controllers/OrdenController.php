@@ -18,15 +18,12 @@ class OrdenController extends Controller
      * Muestra una lista de las órdenes.
      */
     public function index()
-{
-    // Cargar solo lo mínimo necesario
-    $ordenes = Orden::with(['cliente:id,nombre_completo', 'inspector:id,nombre_completo'])
-                    ->select('id', 'contrato', 'num_insp', 'estado', 'cliente_id', 'inspector_id', 'created_at')
-                    ->latest()
-                    ->paginate(15);
-    
-    return view('ordenes.index', compact('ordenes'));
-}
+    {
+        $ordenes = Orden::with(['cliente', 'inspector']) // Carga relaciones comunes para la lista
+                        ->latest()
+                        ->paginate(15);
+        return view('ordenes.index', compact('ordenes'));
+    }
     
 
     /**
