@@ -47,6 +47,7 @@ COPY --from=node-build /app/public/build /app/public/build
 # Configurar Nginx y Supervisor
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY .docker/php-fpm.conf /usr/local/etc/php-fpm.d/zz-custom.conf
 
 # Crear estructura de directorios
 RUN mkdir -p /app/storage/app/public \
