@@ -49,6 +49,12 @@ COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY .docker/php-fpm.conf /usr/local/etc/php-fpm.d/zz-custom.conf
 
+# -----------------------------------------------------------------------------
+# CORRECCIÓN: Publicar assets de Livewire usando el comando estándar de Laravel
+# Esto reemplaza al comando antiguo que causaba el error "--force does not exist"
+# -----------------------------------------------------------------------------
+RUN php artisan vendor:publish --tag=livewire:assets --force || true
+
 # Crear estructura de directorios
 RUN mkdir -p /app/storage/app/public \
     && mkdir -p /app/storage/logs \
@@ -59,10 +65,10 @@ RUN mkdir -p /app/storage/app/public \
     && mkdir -p /app/public/livewire
 
 # Configurar permisos
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
-    && chmod -R 775 /app/storage /app/bootstrap/cache
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/public/livewire \
+    && chmod -R 775 /app/storage /app/bootstrap/cache /app/public/livewire
 
-# Crear script de inicio que maneje todo correctamente
+# Crear script de inicio
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
@@ -74,20 +80,16 @@ php artisan cache:clear || true\n\
 php artisan route:clear || true\n\
 php artisan view:clear || true\n\
 \n\
-# Publicar assets de Livewire con más robustez\n\
-php artisan livewire:publish --assets || echo "WARNING: Failed to publish Livewire assets"\n\
-php artisan vendor:publish --tag=livewire:assets || echo "Alternative Livewire publish failed"\n\
-\n\
 # Recrear cachés\n\
 php artisan config:cache\n\
 php artisan route:cache\n\
 php artisan view:cache\n\
 \n\
-# Crear enlace simbólico para storage (con ruta absoluta)\n\
+# Crear enlace simbólico para storage\n\
 rm -f /app/public/storage\n\
 ln -sfn /app/storage/app/public /app/public/storage || echo "WARNING: Failed to create storage link"\n\
 \n\
-# Verificar que el enlace se creó\n\
+# Verificar estructura de storage\n\
 if [ -L /app/public/storage ]; then\n\
     echo "✓ Storage link created successfully"\n\
 else\n\
@@ -95,8 +97,8 @@ else\n\
     mkdir -p /app/public/storage/uploads\n\
 fi\n\
 \n\
-# Verificar permisos\n\
-chown -R www-data:www-data /app/storage /app/bootstrap/cache\n\
+# Asegurar permisos finales\n\
+chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/public/livewire\n\
 chmod -R 775 /app/storage /app/bootstrap/cache\n\
 \n\
 echo "=== Configuración completada ==="\n\
